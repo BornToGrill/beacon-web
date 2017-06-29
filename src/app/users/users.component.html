@@ -1,0 +1,10 @@
+<md-list *ngFor='let user of users'>
+		<md-list-item (click)="gotoMap(user)">
+			<img md-list-avatar src={{user.profile_image}}>
+			<h3 md-line>{{user.first_name}} {{user.last_name}}</h3>
+			<p md-line>
+				{{user.job}}
+			</p>
+		</md-list-item>
+		<md-divider></md-divider>
+</md-list>
