@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -15,7 +16,8 @@ export class UsersComponent {
 	];
 
 	constructor(
-		private _http: Http
+		private _http: Http,
+		private _router: Router
 	) {
 		this.fetchUsers();
 	}
@@ -30,7 +32,7 @@ export class UsersComponent {
 	}
 
 	gotoMap(user) {
-		console.log('Going to map', user)
+		this._router.navigate(['/position', user.id]);
 	}
 
 }
