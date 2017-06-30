@@ -10,10 +10,7 @@ import 'rxjs/add/operator/toPromise';
 })
 export class UsersComponent {
 
-	private users: any = [
-		{ first_name : 'Hannah' },
-		{ first_name : 'Daniel ' }
-	];
+	private users: any;
 
 	constructor(
 		private _http: Http,
@@ -23,7 +20,7 @@ export class UsersComponent {
 	}
 
 	fetchUsers() {
-		this._http.get('http://localhost:8080/users')
+		this._http.get('http://raspberry.daniel-molenaar.com:8080/users')
 		.toPromise()
 		.then(response => {
 			this.users = response.json();

@@ -1,7 +1,11 @@
-<p>
-  map works!
-  User Id: {{userId}}
-</p>
-
-<canvas #myCanvas>
-</canvas>
+<div class='full-height'>
+   <div (scroll)='console.log("HEY 2")' id='canvasContainer'>
+      <canvas #myCanvas id='canvas'
+      (mousedown)='canvasMouseDown($event);'
+      (mousemove)='canvasMouseMove($event);'
+      (mouseup)='canvasMouseUp($event);'
+      (scroll)='console.log("HEY");'>
+      <div (scroll)="onScroll($event)"
+   </canvas>
+   </div>
+</div>
