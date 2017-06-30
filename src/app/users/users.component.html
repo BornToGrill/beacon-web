@@ -1,8 +1,9 @@
 
-<md-input-container class="full-width">
+<md-input-container id='search' class="full-width">
     <input mdInput [(ngModel)]="query" placeholder='Search' (input)="applyFilter()">
   </md-input-container>
 
+<md-divider></md-divider>
 <md-list *ngFor='let user of activeUsers'>
 		<md-list-item (click)="gotoMap(user)">
 			<img md-list-avatar src={{user.profile_image}}>
@@ -11,5 +12,5 @@
 				{{user.job}}
 			</p>
 		</md-list-item>
-		<md-divider></md-divider>
+      <md-divider></md-divider>
 </md-list>

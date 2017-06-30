@@ -8,7 +8,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 
-import { MdCheckboxModule, MdListModule, MdInputModule } from '@angular/material';
+import { MdCheckboxModule, MdListModule, MdInputModule, MdSidenavModule, MdToolbarModule } from '@angular/material';
 import { MapComponent } from './map/map.component';
 import { FilterComponent } from './filter/filter.component';
 
@@ -34,7 +34,9 @@ const appRoutes: Routes = [
     // Angular material
     MdCheckboxModule,
     MdInputModule,
-    MdListModule
+    MdListModule,
+    MdSidenavModule,
+    MdToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
    selector: 'app-filter',
@@ -7,9 +7,24 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class FilterComponent implements OnInit {
 
+   private _showBeacons: boolean = false;
+
    @Output()
-   public showBeacons: EventEmitter<boolean> = new EventEmitter();
-   private _showBeacons: boolean = true;
+   public showBeaconsChange: EventEmitter<boolean> = new EventEmitter();
+
+   @Input()
+   public get showBeacons() {
+   console.log('Get:', this._showBeacons);
+      return this._showBeacons;
+   }
+
+   public set showBeacons(val: boolean) {
+      this._showBeacons = val;
+      this.showBeaconsChange.emit(this._showBeacons);
+
+      console.log('Set:', this._showBeacons);
+   }
+
 
    constructor() {
 
@@ -18,8 +33,13 @@ export class FilterComponent implements OnInit {
    ngOnInit() {
    }
 
-   toggleBeacons() {
-      this._showBeacons = this._showBeacons;
-      this.showBeacons.emit(this._showBeacons);
+   private toggleBeacons() {
+      console.log('toggleBeacons', this._showBeacons);
+      this.showBeacons = !this.showBeacons;
    }
+
+   public toggle() {
+      console.log('Toggle');
+   }
+
 }

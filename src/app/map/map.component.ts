@@ -11,6 +11,7 @@ import 'rxjs/add/operator/toPromise';
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
    @ViewChild('myCanvas') _canvas: ElementRef;
+   @ViewChild('canvasDiv') _canvasDiv: ElementRef;
    private canvas: any;
    private ctx: any;
    private _image: any;
@@ -42,9 +43,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
    toggleBeacons(show: boolean) {
       this.showBeacons = show;
       this.redraw();
-   }
-   log(event) {
-      console.log('Logged:', event);
    }
 
    ngOnInit() {
@@ -95,21 +93,29 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
          .then(response => {
             const json = response.json();
             const { x, y } = json;
-            console.log('Position:', { x, y });
+            //console.log('Position:', { x, y });
             const transformed = this.transformPosition({ x, y });
             this.currentPosition = transformed;
             this.redraw();
          })
    }
 
+   resizeCanvas() {
+      const canvas = this._canvas.nativeElement;
+      const { offsetWidth, offsetHeight } = this._canvasDiv.nativeElement;
+      canvas.width = offsetWidth;
+      canvas.height = offsetHeight;
+      this.trackTransforms(this.ctx);
+
+      const { width, height } = canvas;
+      this.ctx.translate(width / 4, height / 4);
+      this.redraw();
+   }
+
    _configureCanvas() {
       const { width, height } = this._image;
       const canvas = this._canvas.nativeElement;
-      canvas.width = document.body.clientWidth;
-      canvas.height = document.body.clientHeight;
-      this.trackTransforms(this.ctx); // Modifies ctx object.
-      this.redraw()
-      setInterval(this.redraw.bind(this), 1000);
+      this.resizeCanvas();
       this.fetchBeacons();
    }
 
@@ -140,7 +146,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
    }
 
    canvasScroll(event) {
-      var delta = event.wheelDelta ? event.wheelDelta/40 : event.detail ? -event.detail : 0;
+      var delta = event.wheelDelta ? event.wheelDelta / 40 : event.detail ? -event.detail : 0;
       if (delta) this.zoom(delta);
       event.preventDefault();
       return false;

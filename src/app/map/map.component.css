@@ -1,16 +1,8 @@
-app-filter {
+/*app-filter {
 	position: fixed;
 	z-index: 10000000;
-}
+}*/
 
-#canvasContainer {
-	position: relative;
-}
-
-#canvas {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+#canvasDiv {
+		overflow: hidden;
 }

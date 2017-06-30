@@ -1,3 +1,11 @@
+#search {
+	margin-top: 2%;
+}
+
+md-list {
+	padding-top: 0;
+}
+
 md-list-item {
 	transition: background-color 0.5s linear;
 }
