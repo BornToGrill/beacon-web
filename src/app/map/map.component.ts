@@ -57,6 +57,7 @@ export class MapComponent implements OnInit, AfterViewInit {
             const translatedX = (this._image.width / this.meterSize.x) * x;
             const translatedY = (this._image.height / this.meterSize.y) * y;
             this.currentPosition = { x: translatedX, y: translatedY };
+            this.redraw();
          })
    }
 
