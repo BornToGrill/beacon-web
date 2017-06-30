@@ -1,11 +1,12 @@
 <div class='full-height'>
    <div (scroll)='console.log("HEY 2")' id='canvasContainer'>
       <canvas #myCanvas id='canvas'
-      (mousedown)='canvasMouseDown($event);'
-      (mousemove)='canvasMouseMove($event);'
-      (mouseup)='canvasMouseUp($event);'
-      (scroll)='console.log("HEY");'>
+         (mousedown)='canvasMouseDown($event);'
+         (mousemove)='canvasMouseMove($event);'
+         (mouseup)='canvasMouseUp($event);'
+         (scroll)='console.log("HEY");'>
       <div (scroll)="onScroll($event)"
-   </canvas>
+      </canvas>
    </div>
+   <app-filter (showBeacons)='toggleBeacons($event);'></app-filter>
 </div>

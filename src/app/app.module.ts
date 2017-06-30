@@ -10,6 +10,7 @@ import { UsersComponent } from './users/users.component';
 
 import { MdCheckboxModule, MdListModule, MdInputModule } from '@angular/material';
 import { MapComponent } from './map/map.component';
+import { FilterComponent } from './filter/filter.component';
 
 const appRoutes: Routes = [
    { path: '', component: UsersComponent, pathMatch: 'full' },
@@ -20,7 +21,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     UsersComponent,
-    MapComponent
+    MapComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,

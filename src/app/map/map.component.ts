@@ -25,8 +25,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
    private currentPosition = { x: -Infinity, y: -Infinity };
    private meterSize = { x: 100, y: 50 };
+   private beacons = [ {x: 50, y: 100 }];
 
    private fetchTask: number;
+   private showBeacons: boolean = false;
 
 
    constructor(
@@ -37,11 +39,18 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       this._image.src = '../../assets/layout.svg';
 
    }
+   toggleBeacons(show: boolean) {
+      this.showBeacons = show;
+      this.redraw();
+   }
+   log(event) {
+      console.log('Logged:', event);
+   }
 
    ngOnInit() {
       this.activatedRoute.params.subscribe(params => {
          this.userId = +params['id'];
-         this.fetchTask = setInterval(this.fetch.bind(this), 1000);
+         this.fetchTask = setInterval(this.fetchPosition.bind(this), 1000);
       });
       this.canvas = this._canvas.nativeElement;
       this.ctx = this.canvas.getContext('2d');
@@ -56,17 +65,39 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
    ngOnDestroy() {
       clearInterval(this.fetchTask);
    }
+   transformPosition(position: { x: number, y: number }) {
+      const { x, y } = position;
+      const translatedX = (this._image.width / this.meterSize.x) * x;
+      const translatedY = (this._image.height / this.meterSize.y) * y;
+      return {
+         x: translatedX,
+         y: translatedY
+      };
+   }
 
-   fetch() {
+   fetchBeacons() {
+      this._http.get('http://raspberry.daniel-molenaar.com:8080/beacons')
+      .toPromise()
+      .then(response => {
+         const json = response.json();
+         this.beacons = json.map(b => {
+            const { x , y } = b;
+            const transformed = this.transformPosition({ x, y });
+            return transformed;
+         });
+         this.redraw();
+      });
+   }
+
+   fetchPosition() {
       this._http.get(`http://raspberry.daniel-molenaar.com:8081/${this.userId}`)
          .toPromise()
          .then(response => {
             const json = response.json();
             const { x, y } = json;
             console.log('Position:', { x, y });
-            const translatedX = (this._image.width / this.meterSize.x) * x;
-            const translatedY = (this._image.height / this.meterSize.y) * y;
-            this.currentPosition = { x: translatedX, y: translatedY };
+            const transformed = this.transformPosition({ x, y });
+            this.currentPosition = transformed;
             this.redraw();
          })
    }
@@ -79,6 +110,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       this.trackTransforms(this.ctx); // Modifies ctx object.
       this.redraw()
       setInterval(this.redraw.bind(this), 1000);
+      this.fetchBeacons();
    }
 
    canvasMouseDown(event) {
@@ -160,6 +192,20 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       ctx.fill();
       //ctx.lineWidth = 5;
       ctx.strokeStyle = 'rgba(43, 171, 220, 0.58)';
+      ctx.stroke();
+
+      if (this.showBeacons)
+         this.beacons.forEach(b => this.drawBeacon(ctx, b, radius / 2));
+   }
+
+   drawBeacon(ctx, beacon, radius) {
+      ctx.beginPath();
+      const { x, y } = beacon;
+      ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+      ctx.fillStyle = 'rgba(26, 220, 26, 0.18)';
+      ctx.fill();
+      //ctx.lineWidth = 5;
+      ctx.strokeStyle = 'rgba(26, 220, 26, 0.39)';
       ctx.stroke();
    }
 
