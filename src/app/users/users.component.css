@@ -1,0 +1,7 @@
+md-list-item {
+	transition: background-color 0.5s linear;
+}
+
+md-list-item:hover {
+	background-color: rgba(103, 58, 183, 0.16);
+}

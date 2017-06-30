@@ -1,4 +1,9 @@
-<md-list *ngFor='let user of users'>
+
+<md-input-container class="full-width">
+    <input mdInput [(ngModel)]="query" placeholder='Search' (input)="applyFilter()">
+  </md-input-container>
+
+<md-list *ngFor='let user of activeUsers'>
 		<md-list-item (click)="gotoMap(user)">
 			<img md-list-avatar src={{user.profile_image}}>
 			<h3 md-line>{{user.first_name}} {{user.last_name}}</h3>

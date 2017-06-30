@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, Renderer2, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -8,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
    templateUrl: './map.component.html',
    styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
    @ViewChild('myCanvas') _canvas: ElementRef;
    private canvas: any;
@@ -26,6 +26,8 @@ export class MapComponent implements OnInit, AfterViewInit {
    private currentPosition = { x: -Infinity, y: -Infinity };
    private meterSize = { x: 100, y: 50 };
 
+   private fetchTask: number;
+
 
    constructor(
          private activatedRoute: ActivatedRoute,
@@ -39,12 +41,20 @@ export class MapComponent implements OnInit, AfterViewInit {
    ngOnInit() {
       this.activatedRoute.params.subscribe(params => {
          this.userId = +params['id'];
-         setInterval(this.fetch.bind(this), 1000);
+         this.fetchTask = setInterval(this.fetch.bind(this), 1000);
       });
       this.canvas = this._canvas.nativeElement;
       this.ctx = this.canvas.getContext('2d');
       this.addListeners();
 
+   }
+
+   ngAfterViewInit() {
+      this._configureCanvas();
+   }
+
+   ngOnDestroy() {
+      clearInterval(this.fetchTask);
    }
 
    fetch() {
@@ -59,10 +69,6 @@ export class MapComponent implements OnInit, AfterViewInit {
             this.currentPosition = { x: translatedX, y: translatedY };
             this.redraw();
          })
-   }
-
-   ngAfterViewInit() {
-      this._configureCanvas();
    }
 
    _configureCanvas() {
