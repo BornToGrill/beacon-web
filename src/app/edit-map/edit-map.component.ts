@@ -160,21 +160,21 @@ export class EditMapComponent implements OnInit {
 	}
 
 	private updateBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
-		this.http.put(`http://localhost:8080/beacons/${beacon.uuid}`, beacon)
+		this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
 		//this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
 			.toPromise()
 			.then(response => { });
 	}
 
 	private addBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
-		this.http.post(`http://localhost:8080/beacons`, beacon)
+		this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
 		//this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
 			.toPromise()
 			.then(response => { });
 	}
 
 	private deleteBeaconInApi(beacon: { uuid: string }) {
-		this.http.delete(`http://localhost:8080/beacons/${beacon.uuid}`)
+		this.http.delete(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`)
 			.toPromise()
 			.then(response => { });
 	}
