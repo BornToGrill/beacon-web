@@ -1,0 +1,13 @@
+<div class='box'>
+   <md-toolbar class='row header' color='primary'>
+      <button md-icon-button (click)='filter.toggle()'>
+         <md-icon>menu</md-icon>
+      </button>￼
+   </md-toolbar>
+   <app-filter #filter
+      [(showUsers)]='showUsers'
+      (showBeaconsChange)='toggleBeacons($event);'
+      class='box'>
+      <app-map #map></app-map>
+   </app-filter>
+</div>

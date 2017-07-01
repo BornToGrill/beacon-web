@@ -24,10 +24,11 @@ import {
 import { MapComponent } from './map/map.component';
 import { FilterComponent } from './filter/filter.component';
 import { HomeComponent } from './home/home.component';
+import { UserMapComponent } from './user-map/user-map.component';
 
 const appRoutes: Routes = [
    { path: '', component: HomeComponent, pathMatch: 'full' },
-   { path: 'position/:id', component: MapComponent }
+   { path: 'position/:id', component: UserMapComponent }
 ];
 
 @NgModule({
@@ -36,7 +37,8 @@ const appRoutes: Routes = [
       UsersComponent,
       MapComponent,
       FilterComponent,
-      HomeComponent
+      HomeComponent,
+      UserMapComponent
    ],
    imports: [
       BrowserModule,

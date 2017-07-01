@@ -7,8 +7,8 @@ import { MdSidenav } from '@angular/material';
 })
 export class FilterComponent implements OnInit {
 
-   private _showUsers: boolean = true;
-   private _showBeacons: boolean = false;
+   private _showUsers: boolean;
+   private _showBeacons: boolean;
 
    @ViewChild('nav')
    private _sideNav: MdSidenav;
@@ -27,7 +27,6 @@ export class FilterComponent implements OnInit {
    public get showBeacons() : boolean {
       return this._showBeacons;
    }
-
    public set showUsers(val: boolean) {
       this._showUsers = val;
       this.showUsersChange.emit(this.showUsers);
