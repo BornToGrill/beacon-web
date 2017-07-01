@@ -21,7 +21,7 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	private fetchPositionTask: number;
 
 	private userPosition: Circle;
-	private beacons: Array<Circle> = [];
+	private beacons: Array<Circle>;
 
 	private _showUsers: boolean;
 	private get showUsers() { return this._showUsers; }
@@ -33,11 +33,25 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 	}
 
+	private _showBeacons: boolean;
+	private get showBeacons() { return this._showBeacons; }
+	private set showBeacons(val: boolean) {
+		this._showBeacons = val;
+		if (this.beacons) {
+			this.beacons.forEach(beacon => {
+				beacon.visible = this._showBeacons;
+			});
+			this.map.redraw();
+		}
+
+	}
+
 	constructor(
 		private activatedRoute: ActivatedRoute,
 		private http: Http
 	) {
-
+		this.showUsers = true;
+		this.showBeacons = false;
 	}
 
 	ngOnInit() {
@@ -47,6 +61,7 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		const user = new Circle(-Infinity, -Infinity, 25);
 		user.fill = 'rgba(43, 202, 220, 0.44)';
 		user.stroke = 'rgba(43, 171, 220, 0.58)';
+		user.visible = this.showUsers;
 		this.userPosition = user;
 		this.map.addElement(this.userPosition);
 
@@ -61,25 +76,20 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		clearInterval(this.fetchPositionTask);
 	}
 
-	private toggleBeacons(show: boolean) {
-		this.beacons.forEach(beacon => {
-			beacon.visible = show;
-		});
-		this.map.redraw();
-	}
-
 	private fetchBeacons() {
 		this.http.get('http://raspberry.daniel-molenaar.com:8080/beacons')
 			.toPromise()
 			.then(response => {
 				const json = response.json();
-				json.forEach(b => {
+				const beacons = json.map(b => {
 					const circle = new Circle(b.x, b.y, 25 / 2);
 					circle.fill = 'rgba(26, 220, 26, 0.18)';
 					circle.stroke = 'rgba(26, 220, 26, 0.39)';
-					this.beacons.push(circle);
-					this.map.addElement(circle);
-				})
+					circle.visible = this.showBeacons;
+					return circle;
+				});
+				this.beacons = beacons;
+				beacons.forEach(b => this.map.addElement(b));
 				this.map.redraw();
 			});
 	}
@@ -90,7 +100,7 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		.then(response => {
 			const json = response.json();
 			const { x, y } = json;
-			console.log({x, y});
+			//console.log({x, y});
 			this.userPosition.x = x;
 			this.userPosition.y = y;
 			this.map.redraw();

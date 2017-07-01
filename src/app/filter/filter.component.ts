@@ -5,13 +5,13 @@ import { MdSidenav } from '@angular/material';
    templateUrl: './filter.component.html',
    styleUrls: ['./filter.component.css']
 })
-export class FilterComponent implements OnInit {
-
-   private _showUsers: boolean;
-   private _showBeacons: boolean;
+export class FilterComponent {
 
    @ViewChild('nav')
    private _sideNav: MdSidenav;
+
+   private _showUsers: boolean;
+   private _showBeacons: boolean;
 
    @Output()
    public showUsersChange: EventEmitter<boolean> = new EventEmitter();
@@ -22,11 +22,11 @@ export class FilterComponent implements OnInit {
    public get showUsers() : boolean {
       return this._showUsers;
    }
-
    @Input()
    public get showBeacons() : boolean {
       return this._showBeacons;
    }
+
    public set showUsers(val: boolean) {
       this._showUsers = val;
       this.showUsersChange.emit(this.showUsers);
@@ -35,18 +35,6 @@ export class FilterComponent implements OnInit {
    public set showBeacons(val: boolean) {
       this._showBeacons = val;
       this.showBeaconsChange.emit(this.showBeacons);
-   }
-
-   constructor() {
-
-   }
-
-   ngOnInit() {
-   }
-
-   private toggleBeacons() {
-      console.log('toggleBeacons', this._showBeacons);
-      this.showBeacons = !this.showBeacons;
    }
 
    public toggle() {

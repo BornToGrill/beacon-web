@@ -6,7 +6,7 @@
    </md-toolbar>
    <app-filter #filter
       [(showUsers)]='showUsers'
-      (showBeaconsChange)='toggleBeacons($event);'
+      [(showBeacons)]='showBeacons'
       class='box'>
       <app-map #map></app-map>
    </app-filter>
