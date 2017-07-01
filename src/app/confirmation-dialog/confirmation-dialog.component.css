@@ -1,0 +1,13 @@
+#dialog {
+	font-family: 'Roboto,"Helvetica Neue",sans-serif';
+}
+
+#acceptButton {
+	width: 45%;
+	margin-right: 5%;
+}
+
+#denyButton {
+	width: 45%;
+	margin-left: 5%;
+}

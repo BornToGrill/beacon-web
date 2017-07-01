@@ -19,7 +19,8 @@ import {
    MdButtonModule,
    MdButtonToggleModule,
    MdTabsModule,
-   MdCardModule
+   MdCardModule,
+   MdDialogModule
 } from '@angular/material';
 
 import { MapComponent } from './map/map.component';
@@ -27,6 +28,7 @@ import { FilterComponent } from './filter/filter.component';
 import { HomeComponent } from './home/home.component';
 import { UserMapComponent } from './user-map/user-map.component';
 import { EditMapComponent } from './edit-map/edit-map.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 const appRoutes: Routes = [
    { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -42,7 +44,11 @@ const appRoutes: Routes = [
       FilterComponent,
       HomeComponent,
       UserMapComponent,
-      EditMapComponent
+      EditMapComponent,
+      ConfirmationDialogComponent
+   ],
+   entryComponents: [
+      ConfirmationDialogComponent
    ],
    imports: [
       BrowserModule,
@@ -61,7 +67,8 @@ const appRoutes: Routes = [
       MdButtonModule,
       MdButtonToggleModule,
       MdTabsModule,
-      MdCardModule
+      MdCardModule,
+      MdDialogModule
    ],
    providers: [
       MdIconRegistry

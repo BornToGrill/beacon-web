@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
+import { MdDialog } from '@angular/material';
 
 import { IRenderable, Circle } from '../../models/renderable';
 import { MapComponent } from '../map/map.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
 	selector: 'app-edit-map',
@@ -50,14 +52,18 @@ export class EditMapComponent implements OnInit {
 	}
 
 	private set currentX(val) {
-		if (this.currentlySelected)
+		if (this.currentlySelected) {
 			this.currentlySelected.circle.x = val;
+			this.currentlySelected.beacon.x = val;
+		}
 		this.map.redraw();
 	}
 
 	private set currentY(val) {
-		if (this.currentlySelected)
+		if (this.currentlySelected) {
 			this.currentlySelected.circle.y = val;
+			this.currentlySelected.beacon.y = val;
+		}
 		this.map.redraw();
 	}
 
@@ -85,7 +91,8 @@ export class EditMapComponent implements OnInit {
 	}
 
 	constructor(
-		private http: Http
+		private http: Http,
+		private dialog: MdDialog
 	) { }
 
 	ngOnInit() {
@@ -119,6 +126,8 @@ export class EditMapComponent implements OnInit {
 		const { x, y, commited } = this.startingState;
 		const { beacon } = this.currentlySelected;
 		beacon.commited = true;
+		beacon.x = parseFloat(beacon.x);
+		beacon.y = parseFloat(beacon.y);
 		if (!commited)
 			this.addBeaconInApi(beacon);
 		else
@@ -137,14 +146,35 @@ export class EditMapComponent implements OnInit {
 		this.currentlySelected = undefined;
 	}
 
-	private updateBeaconInApi(beacon: any) {
-		this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
+	private deleteBeacon() {
+		const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+		dialogRef.afterClosed().subscribe(result => {
+			if (result !== 'accept') return;
+			const { beacon, circle } = this.currentlySelected;
+			this.map.removeElement(circle);
+			const index = this.beacons.indexOf(this.currentlySelected);
+			this.beacons.splice(index, 1);
+			this.currentlySelected = undefined;
+			this.deleteBeaconInApi(beacon);
+		});
+	}
+
+	private updateBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
+		this.http.put(`http://localhost:8080/beacons/${beacon.uuid}`, beacon)
+		//this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
 			.toPromise()
 			.then(response => { });
 	}
 
-	private addBeaconInApi(beacon: any) {
-		this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
+	private addBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
+		this.http.post(`http://localhost:8080/beacons`, beacon)
+		//this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
+			.toPromise()
+			.then(response => { });
+	}
+
+	private deleteBeaconInApi(beacon: { uuid: string }) {
+		this.http.delete(`http://localhost:8080/beacons/${beacon.uuid}`)
 			.toPromise()
 			.then(response => { });
 	}
