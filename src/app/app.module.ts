@@ -17,14 +17,16 @@ import {
    MdIconModule,
    MdIconRegistry,
    MdButtonModule,
-   MdButtonToggleModule
+   MdButtonToggleModule,
+   MdTabsModule
 } from '@angular/material';
 
 import { MapComponent } from './map/map.component';
 import { FilterComponent } from './filter/filter.component';
+import { HomeComponent } from './home/home.component';
 
 const appRoutes: Routes = [
-   { path: '', component: UsersComponent, pathMatch: 'full' },
+   { path: '', component: HomeComponent, pathMatch: 'full' },
    { path: 'position/:id', component: MapComponent }
 ];
 
@@ -33,7 +35,8 @@ const appRoutes: Routes = [
       AppComponent,
       UsersComponent,
       MapComponent,
-      FilterComponent
+      FilterComponent,
+      HomeComponent
    ],
    imports: [
       BrowserModule,
@@ -50,7 +53,8 @@ const appRoutes: Routes = [
       MdToolbarModule,
       MdIconModule,
       MdButtonModule,
-      MdButtonToggleModule
+      MdButtonToggleModule,
+      MdTabsModule
    ],
    providers: [
       MdIconRegistry

@@ -1,7 +1,6 @@
-
 <md-input-container id='search' class="full-width">
     <input mdInput [(ngModel)]="query" placeholder='Search' (input)="applyFilter()">
-  </md-input-container>
+</md-input-container>
 
 <md-divider></md-divider>
 <md-list *ngFor='let user of activeUsers'>

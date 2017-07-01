@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
-	selector: 'users-list',
+	selector: 'app-users',
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.css']
 })
