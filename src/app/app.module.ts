@@ -8,7 +8,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 
-import { MdCheckboxModule, MdListModule, MdInputModule, MdSidenavModule, MdToolbarModule } from '@angular/material';
+import {
+   MdCheckboxModule,
+   MdListModule,
+   MdInputModule,
+   MdSidenavModule,
+   MdToolbarModule,
+   MdIconModule,
+   MdIconRegistry,
+   MdButtonModule,
+   MdButtonToggleModule
+} from '@angular/material';
+
 import { MapComponent } from './map/map.component';
 import { FilterComponent } from './filter/filter.component';
 
@@ -18,27 +29,34 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    UsersComponent,
-    MapComponent,
-    FilterComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpModule,
-    FormsModule,
-    RouterModule.forRoot(appRoutes),
+   declarations: [
+      AppComponent,
+      UsersComponent,
+      MapComponent,
+      FilterComponent
+   ],
+   imports: [
+      BrowserModule,
+      BrowserAnimationsModule,
+      HttpModule,
+      FormsModule,
+      RouterModule.forRoot(appRoutes),
 
-    // Angular material
-    MdCheckboxModule,
-    MdInputModule,
-    MdListModule,
-    MdSidenavModule,
-    MdToolbarModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+      // Angular material
+      MdCheckboxModule,
+      MdInputModule,
+      MdListModule,
+      MdSidenavModule,
+      MdToolbarModule,
+      MdIconModule,
+      MdButtonModule,
+      MdButtonToggleModule
+   ],
+   providers: [
+      MdIconRegistry
+   ],
+   bootstrap: [
+      AppComponent
+   ]
 })
 export class AppModule { }

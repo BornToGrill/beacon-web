@@ -1,6 +1,8 @@
 
 <md-sidenav-container>
-	<md-sidenav mode='side'>
-		<p (click)='toggleBeacons();'>Click me!</p>
-	</md-sidenav>
+   <md-sidenav #nav mode='side'>
+         <md-checkbox [(ngModel)]='showUsers' color='primary'>Users</md-checkbox>
+   		<md-checkbox [(ngModel)]='showBeacons' color='primary'>Beacons</md-checkbox>
+   </md-sidenav>
+   <ng-content></ng-content>
 </md-sidenav-container>

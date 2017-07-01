@@ -30,6 +30,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
 
    private fetchTask: number;
    private showBeacons: boolean = false;
+   private showUsers: boolean = true;
 
 
    constructor(
@@ -42,6 +43,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
    }
    toggleBeacons(show: boolean) {
       this.showBeacons = show;
+      this.redraw();
+   }
+
+   toggleUsers(show: boolean) {
+      this.showUsers = show;
       this.redraw();
    }
 
@@ -191,27 +197,30 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
       const scaleFactor = 0.8;
       const radius = 25 / (transform.d / scaleFactor);
 
-      ctx.beginPath();
-      const { x, y } = this.currentPosition;
-      ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-      ctx.fillStyle = 'rgba(43, 202, 220, 0.44)';
-      ctx.fill();
-      //ctx.lineWidth = 5;
-      ctx.strokeStyle = 'rgba(43, 171, 220, 0.58)';
-      ctx.stroke();
-
+      if (this.showUsers)
+         this.drawUser(ctx, this.currentPosition, radius);
       if (this.showBeacons)
          this.beacons.forEach(b => this.drawBeacon(ctx, b, radius / 2));
    }
 
-   drawBeacon(ctx, beacon, radius) {
+   drawBeacon(ctx, position: { x: number, y: number }, radius: number) {
       ctx.beginPath();
-      const { x, y } = beacon;
+      const { x, y } = position;
       ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = 'rgba(26, 220, 26, 0.18)';
       ctx.fill();
       //ctx.lineWidth = 5;
       ctx.strokeStyle = 'rgba(26, 220, 26, 0.39)';
+      ctx.stroke();
+   }
+
+   drawUser(ctx, position: { x:number, y: number }, radius: number) {
+      ctx.beginPath();
+      const { x, y } = position;
+      ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+      ctx.fillStyle = 'rgba(43, 202, 220, 0.44)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(43, 171, 220, 0.58)';
       ctx.stroke();
    }
 

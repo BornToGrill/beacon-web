@@ -1,15 +1,24 @@
 <div class='box'>
    <md-toolbar class='row header' color="primary">
-      <span>Toolbar</span>
+      <button md-icon-button (click)='filter.toggle()'>
+         <md-icon>menu</md-icon>
+      </button>￼
    </md-toolbar>
+   <app-filter #filter
+      (showUsersChange)='toggleUsers($event);'
+      (showBeaconsChange)='toggleBeacons($event);'
+      class='box'>
 
-   <div id='canvasDiv' #canvasDiv class='full-height row content'>
+      <div id='canvasDiv' #canvasDiv style='height: 100%;' class='row content'>
          <canvas #myCanvas id='canvas' (window:resize)='resizeCanvas($event);'
          (mousedown)='canvasMouseDown($event);'
          (mousemove)='canvasMouseMove($event);'
          (mouseup)='canvasMouseUp($event);'
          (scroll)='console.log("HEY");'>
       </canvas>
-      <!--<app-filter #filter (showBeaconsChange)='toggleBeacons($event);'></app-filter>-->
    </div>
+   </app-filter>
+
+
+
 </div>

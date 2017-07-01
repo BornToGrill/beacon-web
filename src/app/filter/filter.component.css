@@ -1,0 +1,20 @@
+md-sidenav-container {
+   height: 100%;
+}
+md-checkbox {
+   display: block;
+   margin-bottom: 15px;
+}
+
+md-sidenav {
+   border-right: #673ab7 1px solid;
+   background: rgba(103, 58, 183, 0.2);
+   padding: 35px;
+}
+
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
