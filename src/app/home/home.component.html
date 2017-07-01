@@ -3,8 +3,24 @@
 </md-toolbar>
 
 <md-tab-group>
-  <md-tab label="Employees">
-     <app-users></app-users>
- </md-tab>
-  <md-tab label="Maps">Content 2</md-tab>
+   <md-tab label="Employees">
+      <app-users></app-users>
+   </md-tab>
+   <md-tab label="Maps">
+      <!-- TODO: Move to component -->
+      <p>Working</p>
+
+      <md-list *ngFor='let map of maps'>
+      		<md-list-item (click)='editMap(map);'>
+      			<img md-list-avatar src={{map.image}}>
+      			<h3 md-line>{{map.name}}</h3>
+      			<p md-line>
+      				Description
+      			</p>
+      		</md-list-item>
+            <md-divider></md-divider>
+      </md-list>
+
+
+   </md-tab>
 </md-tab-group>

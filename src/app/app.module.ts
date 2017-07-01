@@ -18,17 +18,20 @@ import {
    MdIconRegistry,
    MdButtonModule,
    MdButtonToggleModule,
-   MdTabsModule
+   MdTabsModule,
+   MdCardModule
 } from '@angular/material';
 
 import { MapComponent } from './map/map.component';
 import { FilterComponent } from './filter/filter.component';
 import { HomeComponent } from './home/home.component';
 import { UserMapComponent } from './user-map/user-map.component';
+import { EditMapComponent } from './edit-map/edit-map.component';
 
 const appRoutes: Routes = [
    { path: '', component: HomeComponent, pathMatch: 'full' },
-   { path: 'position/:id', component: UserMapComponent }
+   { path: 'position/:id', component: UserMapComponent },
+   { path: 'maps/:name', component: EditMapComponent }
 ];
 
 @NgModule({
@@ -38,7 +41,8 @@ const appRoutes: Routes = [
       MapComponent,
       FilterComponent,
       HomeComponent,
-      UserMapComponent
+      UserMapComponent,
+      EditMapComponent
    ],
    imports: [
       BrowserModule,
@@ -56,7 +60,8 @@ const appRoutes: Routes = [
       MdIconModule,
       MdButtonModule,
       MdButtonToggleModule,
-      MdTabsModule
+      MdTabsModule,
+      MdCardModule
    ],
    providers: [
       MdIconRegistry

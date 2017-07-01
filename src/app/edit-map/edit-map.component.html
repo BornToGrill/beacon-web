@@ -1,0 +1,36 @@
+<div class='box'>
+	<md-toolbar class='row header' color='primary'>
+		<button md-icon-button (click)='nav.toggle()'>
+			<md-icon>menu</md-icon>
+		</button>￼
+	</md-toolbar>
+	<md-sidenav-container class='box'>
+		<md-sidenav #nav mode='side'>
+			<p>Sidenav!</p>
+		</md-sidenav>
+		<app-map #map></app-map>
+	</md-sidenav-container>
+</div>
+
+<div id='selectedContainer'>
+	<md-card *ngIf='currentlySelected'>
+	<!-- <md-card> -->
+		<md-input-container class='full-width'>
+			<input mdInput placeholder="UUID" [(ngModel)]='currentUUID' disabled='commited'>
+		</md-input-container>
+		<div class='full-width'>
+			<md-input-container>
+				<input mdInput placeholder="X" [(ngModel)]='currentX'>
+			</md-input-container>
+			<md-input-container>
+				<input mdInput placeholder="Y" [(ngModel)]='currentY'>
+			</md-input-container>
+		</div>
+	</md-card>
+</div>
+
+<div *ngIf='currentlySelected' id='confirmButtons'>
+<!--<div id='confirmButtons'>-->
+	<a md-fab color='primary' (click)='applyChanges()'><md-icon>check</md-icon></a>
+	<a md-fab color='accent' (click)='revertChanges()'><md-icon>clear</md-icon></a>
+</div>

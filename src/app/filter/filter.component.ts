@@ -39,7 +39,6 @@ export class FilterComponent {
 
    public toggle() {
       this._sideNav.toggle();
-      console.log('Toggled sidenav.', this._sideNav.opened);
    }
 
 }

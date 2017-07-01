@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Renderer2, Elem
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 
-import { IRenderable, Img } from '../../models/renderable';
+import { IRenderable, Circle, Img } from '../../models/renderable';
 import { trackTransforms } from '../../util/canvas';
 import 'rxjs/add/operator/toPromise';
 
@@ -76,6 +76,14 @@ export class MapComponent implements OnInit, AfterViewInit {
       };
    }
 
+   public reversePosition(position: { x: number, y: number }) {
+      const { x, y } = position;
+      const translatedX = x / (this.mapImage.image.width / this.meterSize.x);
+      const translatedY = y / (this.mapImage.image.height / this.meterSize.y);
+      return { x: translatedX, y: translatedY };
+   }
+
+
    private resizeCanvas() {
       const canvas = this.canvasElement.nativeElement;
       const { offsetWidth, offsetHeight } = this.canvasDivElement.nativeElement;
@@ -105,7 +113,20 @@ export class MapComponent implements OnInit, AfterViewInit {
 
    private canvasMouseUp(event) {
       this.dragStart = null;
-      if (!this.dragged) this.zoom(event.shiftKey ? -1 : 1 );
+
+      // Zoom on click below
+      //if (!this.dragged) this.zoom(event.shiftKey ? -1 : 1 );
+   }
+
+   private canvasClick(event) {
+      if (this.dragged) return;
+
+      const { offsetX, offsetY } = event;
+      const canvasPoint = this.ctx.transformedPoint(offsetX, offsetY);
+      const actualPoint = this.reversePosition(canvasPoint);
+      this._mapElements.forEach(e => {
+         e.hitTest(canvasPoint, this.transformPosition.bind(this));
+      });
    }
 
    private canvasMouseMove(event) {

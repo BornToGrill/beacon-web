@@ -1,6 +1,7 @@
 <div class='box'>
    <div id='canvasDiv' #canvasDiv style='height: 100%;' class='row content'>
       <canvas #myCanvas id='canvas' (window:resize)='resizeCanvas($event);'
+         (click)='canvasClick($event);'
          (mousedown)='canvasMouseDown($event);'
          (mousemove)='canvasMouseMove($event);'
          (mouseup)='canvasMouseUp($event);'>
