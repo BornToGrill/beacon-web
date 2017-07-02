@@ -12,10 +12,3 @@ md-sidenav {
    padding: 35px;
    padding-right: 150px;
 }
-
-.sidenav-content {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}

@@ -1,4 +1,9 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild,
+	trigger,
+    state,
+    style,
+    transition,
+    animate } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
@@ -10,7 +15,14 @@ import { Circle, Img } from '../../models/renderable';
 @Component({
 	selector: 'app-user-map',
 	templateUrl: './user-map.component.html',
-	styleUrls: ['./user-map.component.css']
+	styleUrls: ['./user-map.component.css'],
+	animations: [
+		trigger('slide-in', [
+			state('show', style({ transform: 'translateY(0)' })),
+			state('noshow', style({ transform: 'translateY(110%)' })),
+			transition('noshow <=> show', animate('300ms linear'))
+		])
+	]
 })
 export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -18,6 +30,10 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	private map: MapComponent;
 
 	private userId: number;
+	private trackedUser: any;
+	private showTrackedUser: boolean = true;
+	private get trackedUserState() { return this.showTrackedUser ? 'show' : 'noshow' };
+
 	private fetchPositionTask: number;
 
 	private userPosition: Circle;
@@ -68,6 +84,7 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.fetchBeacons();
 		this.activatedRoute.params.subscribe(params => {
 			this.userId = +params['id'];
+			this.fetchUser();
 			this.fetchPositionTask = setInterval(this.fetchPosition.bind(this), 1000);
 		});
 	}
@@ -91,6 +108,14 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 				this.beacons = beacons;
 				beacons.forEach(b => this.map.addElement(b));
 				this.map.redraw();
+			});
+	}
+
+	private fetchUser() {
+		this.http.get(`http://raspberry.daniel-molenaar.com:8080/users/${this.userId}`)
+			.toPromise()
+			.then(response => {
+				this.trackedUser = response.json();
 			});
 	}
 

@@ -6,9 +6,28 @@
       <app-home-button></app-home-button>
    </md-toolbar>
    <app-filter #filter
-      [(showUsers)]='showUsers'
-      [(showBeacons)]='showBeacons'
-      class='box'>
-      <app-map #map></app-map>
-   </app-filter>
+   [(showUsers)]='showUsers'
+   [(showBeacons)]='showBeacons'
+   class='box'>
+   <app-map #map></app-map>
+
+   <div *ngIf='trackedUser' id='trackingMenuContainer' [@slide-in]='trackedUserState'>
+      <md-card>
+         <md-card-header>
+            <md-card-title>Tracking</md-card-title>
+            <md-card-subtitle><b>{{trackedUser.first_name}} {{trackedUser.last_name}}</b></md-card-subtitle>
+         </md-card-header>
+         <img src={{trackedUser.profile_image}}>
+         <md-progress-bar id='trackingBar' mode="indeterminate"></md-progress-bar>
+      </md-card>
+   </div>
+
+   <div *ngIf='trackedUser' id='displayButtons'>
+      <button md-fab color='primary' (click)='showTrackedUser = !showTrackedUser'>
+         <md-icon *ngIf='showTrackedUser'>keyboard_arrow_down</md-icon>
+         <md-icon *ngIf='!showTrackedUser'>keyboard_arrow_up</md-icon>
+      </button>
+   </div>
+
+</app-filter>
 </div>

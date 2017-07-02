@@ -20,7 +20,8 @@ import {
    MdButtonToggleModule,
    MdTabsModule,
    MdCardModule,
-   MdDialogModule
+   MdDialogModule,
+   MdProgressBarModule
 } from '@angular/material';
 
 import { MapComponent } from './map/map.component';
@@ -70,7 +71,8 @@ const appRoutes: Routes = [
       MdButtonToggleModule,
       MdTabsModule,
       MdCardModule,
-      MdDialogModule
+      MdDialogModule,
+      MdProgressBarModule
    ],
    providers: [
       MdIconRegistry
