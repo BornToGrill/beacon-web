@@ -8,8 +8,6 @@
    </md-tab>
    <md-tab label="Maps">
       <!-- TODO: Move to component -->
-      <p>Working</p>
-
       <md-list *ngFor='let map of maps'>
       		<md-list-item (click)='editMap(map);'>
       			<img md-list-avatar src={{map.image}}>

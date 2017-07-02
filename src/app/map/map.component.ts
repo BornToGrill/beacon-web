@@ -18,8 +18,8 @@ export class MapComponent implements OnInit, AfterViewInit {
 
    @ViewChild('myCanvas') private canvasElement: ElementRef;
    @ViewChild('canvasDiv') private canvasDivElement: ElementRef;
-   private canvas: any;
-   private ctx: any;
+   public canvas: any;
+   public ctx: any;
 
    private userId: number;
 
@@ -53,6 +53,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
    ngOnInit() {
       this.mapImage = new Img('../../assets/layout.svg', () => {
+         this.configureCanvas();
          this.redraw();
       });
       this.canvas = this.canvasElement.nativeElement;
@@ -62,7 +63,6 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
    ngAfterViewInit() {
-      this.configureCanvas();
       this.redraw();
    }
 
@@ -91,8 +91,10 @@ export class MapComponent implements OnInit, AfterViewInit {
       canvas.height = offsetHeight;
       trackTransforms(this.ctx);
 
-      const { width, height } = canvas;
-      this.ctx.translate(width / 4, height / 4);
+      const { width, height } = this.mapImage.image;
+      const centerX = (offsetWidth - width) / 2;
+      const centerY = (offsetHeight - height) / 2;
+      this.ctx.translate(centerX, centerY);
       this.redraw();
    }
 
