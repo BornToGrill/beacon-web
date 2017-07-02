@@ -1,3 +1,7 @@
+:host {
+   font-family: Roboto,"Helvetica Neue",sans-serif
+}
+
 md-sidenav-container {
    height: 100%;
 }
@@ -7,18 +11,10 @@ md-checkbox {
    margin-right: 100px;
 }
 
-/*md-sidenav {
-   padding: 35px;
-   padding-right: 150px;
-}*/
 md-sidenav {
    padding: 25px;
 }
 
 md-slider {
    width: 100%;
-}
-
-:host {
-   font-family: Roboto,"Helvetica Neue",sans-serif
 }

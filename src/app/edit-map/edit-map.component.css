@@ -1,3 +1,20 @@
+:host {
+   font-family: Roboto,"Helvetica Neue",sans-serif
+}
+
+md-sidenav-container {
+   height: 100%;
+}
+
+md-sidenav {
+   padding: 25px;
+}
+
+md-slider {
+   width: 100%;
+}
+
+
 #menuButton {
 	margin-right: 16px;
 }

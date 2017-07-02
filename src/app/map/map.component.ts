@@ -127,7 +127,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       const canvasPoint = this.ctx.transformedPoint(offsetX, offsetY);
       const actualPoint = this.reversePosition(canvasPoint);
       this._mapElements.forEach(e => {
-         e.hitTest(canvasPoint, this.transformPosition.bind(this));
+         e.hitTest(canvasPoint, this.canvas, this.ctx, this.transformPosition.bind(this));
       });
    }
 

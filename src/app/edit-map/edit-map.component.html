@@ -7,7 +7,8 @@
 	</md-toolbar>
 	<md-sidenav-container class='box'>
 		<md-sidenav #nav mode='side'>
-			<p>Sidenav!</p>
+			<span>Beacon size</span>
+         <md-slider min='5' max='75' step='1' [value]='beaconRadius' (input)='beaconRadius=$event.value' color='primary'></md-slider>
 		</md-sidenav>
 		<app-map #map></app-map>
 	</md-sidenav-container>

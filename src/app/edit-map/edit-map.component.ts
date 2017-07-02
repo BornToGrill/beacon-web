@@ -23,6 +23,18 @@ export class EditMapComponent implements OnInit {
 
 	private beacons: Array<any>
 
+	private _beaconRadius: number = 17.5;
+
+	private get beaconRadius() { return this._beaconRadius; }
+
+	private set beaconRadius(val: number) {
+		this._beaconRadius = val;
+		if (this.beacons) {
+			this.beacons.forEach(x => x.circle.radius = val);
+			this.map.redraw();
+		}
+	}
+
 	private get currentUUID() {
 		if (this.currentlySelected)
 			return this.currentlySelected.beacon.uuid;
@@ -94,7 +106,7 @@ export class EditMapComponent implements OnInit {
 	}
 
 	private createBeaconObject(beacon, committed) {
-		const circle = new Circle(beacon.x, beacon.y, 25 / 2);
+		const circle = new Circle(beacon.x, beacon.y, this.beaconRadius);
 		circle.fill = this.fillColor;
 		circle.stroke = this.strokeColor;
 		const  b = { beacon, circle, committed };

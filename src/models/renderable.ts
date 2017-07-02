@@ -1,6 +1,6 @@
 export interface IRenderable {
 	render(canvas: any, ctx: any, transform: ({x, y}) => ({x: number, y: number})) : void;
-	hitTest(point: { x: number, y: number }, transform) : boolean;
+	hitTest(point: { x: number, y: number }, canvas, ctx, transform) : boolean;
 	onClick: () => void;
 }
 
@@ -18,12 +18,15 @@ export class Circle implements IRenderable {
 
 	}
 
+	private calculateRadius(ctx, radius) {
+		const scaleFactor = 1;
+		const t = ctx.getTransform();
+		return radius / (t.d / scaleFactor);
+	}
+
 	public render(canvas: any, ctx: any, transform) : void {
 		if (!this.visible) return;
-		//const transform = ctx.getTransform();
-		const t = ctx.getTransform();
-		const scaleFactor = 0.8;
-		const radius = this.radius / (t.d / scaleFactor);
+		const radius = this.calculateRadius(ctx, this.radius);
 
 		const { x, y } = transform({x: this.x, y: this.y });
 
@@ -37,9 +40,10 @@ export class Circle implements IRenderable {
       ctx.stroke();
 	}
 
-	public hitTest(point, transform) : boolean {
+	public hitTest(point, canvas, ctx, transform) : boolean {
 		const { x, y } = transform({x: this.x, y: this.y });
-		if (Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2) < Math.pow(this.radius, 2)) {
+		const radius = this.calculateRadius(ctx, this.radius);
+		if (Math.pow(point.x - x, 2) + Math.pow(point.y - y, 2) < Math.pow(radius, 2)) {
 			if (this.onClick)
 				this.onClick();
 			return true;
