@@ -84,7 +84,7 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
 
-   private resizeCanvas() {
+   public resizeCanvas() {
       const canvas = this.canvasElement.nativeElement;
       const { offsetWidth, offsetHeight } = this.canvasDivElement.nativeElement;
       canvas.width = offsetWidth;
@@ -103,7 +103,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       this.resizeCanvas();
    }
 
-   private canvasMouseDown(event) {
+   public canvasMouseDown(event) {
       document.body.style['mozUserSelect'] =
             document.body.style.webkitUserSelect =
             document.body.style.userSelect = 'none';
@@ -113,14 +113,14 @@ export class MapComponent implements OnInit, AfterViewInit {
       this.dragged = false;
    }
 
-   private canvasMouseUp(event) {
+   public canvasMouseUp(event) {
       this.dragStart = null;
 
       // Zoom on click below
       //if (!this.dragged) this.zoom(event.shiftKey ? -1 : 1 );
    }
 
-   private canvasClick(event) {
+   public canvasClick(event: any) {
       if (this.dragged) return;
 
       const { offsetX, offsetY } = event;
@@ -131,7 +131,7 @@ export class MapComponent implements OnInit, AfterViewInit {
       });
    }
 
-   private canvasMouseMove(event) {
+   public canvasMouseMove(event) {
       this.lastX = event.offsetX || (event.pageX - this.canvas.offsetLeft);
       this.lastY = event.offsetY || (event.pageY - this.canvas.offsetTop);
       this.dragged = true;

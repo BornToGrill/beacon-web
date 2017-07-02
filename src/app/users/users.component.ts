@@ -11,8 +11,8 @@ import 'rxjs/add/operator/toPromise';
 export class UsersComponent {
 
 	private users: any = [];
-	private activeUsers: any = [];
-	private query: string;
+	public activeUsers: any = [];
+	public query: string;
 
 	constructor(
 		private _http: Http,

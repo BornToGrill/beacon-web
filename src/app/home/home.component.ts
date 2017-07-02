@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
-	private maps = [
+	public maps = [
 		{
 			name: 'Dept',
 			floor: '13.5',
@@ -21,7 +21,7 @@ export class HomeComponent {
 		private router: Router
 	) { }
 
-	private editMap(map: { name: string, image: string }) {
+	public editMap(map: { name: string, image: string }) {
 		this.router.navigate(['/maps', map.name]);
 	}
 

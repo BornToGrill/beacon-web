@@ -33,20 +33,20 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 	private map: MapComponent;
 
 	private userId: number;
-	private trackedUser: any;
-	private showTrackedUser: boolean = true;
-	private get trackedUserState() { return this.showTrackedUser ? 'show' : 'noshow' };
+	public trackedUser: any;
+	public showTrackedUser: boolean = true;
+	public get trackedUserState() { return this.showTrackedUser ? 'show' : 'noshow' };
 
 	private fetchPositionTask: number;
-	private hasPosition: string = 'warn';
+	public hasPosition: string = 'warn';
 
 
-	private userPosition: Circle;
+	public userPosition: Circle;
 	private beacons: Array<Circle>;
 
 	private _showUsers: boolean;
-	private get showUsers() { return this._showUsers; }
-	private set showUsers(val: boolean) {
+	public get showUsers() { return this._showUsers; }
+	public set showUsers(val: boolean) {
 		this._showUsers = val;
 		if (this.userPosition) {
 			this.userPosition.visible = val;
@@ -55,8 +55,8 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private _showBeacons: boolean;
-	private get showBeacons() { return this._showBeacons; }
-	private set showBeacons(val: boolean) {
+	public get showBeacons() { return this._showBeacons; }
+	public set showBeacons(val: boolean) {
 		this._showBeacons = val;
 		if (this.beacons) {
 			this.beacons.forEach(beacon => {
@@ -73,17 +73,17 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 	private _userRadius: number = 35;
 	private _beaconRadius: number = 17.5;
 
-	private get userRadius() { return this._userRadius; }
-	private get beaconRadius() { return this._beaconRadius; }
+	public get userRadius() { return this._userRadius; }
+	public get beaconRadius() { return this._beaconRadius; }
 
-	private set userRadius(val: number) {
+	public set userRadius(val: number) {
 		this._userRadius = val;
 		if (this.userPosition) {
 			this.userPosition.radius = val;
 			this.map.redraw();
 		}
 	}
-	private set beaconRadius(val: number) {
+	public set beaconRadius(val: number) {
 		this._beaconRadius = val;
 		if (this.beacons) {
 			this.beacons.forEach(x => x.radius = val);

@@ -25,9 +25,9 @@ export class EditMapComponent implements OnInit {
 
 	private _beaconRadius: number = 17.5;
 
-	private get beaconRadius() { return this._beaconRadius; }
+	public get beaconRadius() { return this._beaconRadius; }
 
-	private set beaconRadius(val: number) {
+	public set beaconRadius(val: number) {
 		this._beaconRadius = val;
 		if (this.beacons) {
 			this.beacons.forEach(x => x.circle.radius = val);
@@ -35,30 +35,30 @@ export class EditMapComponent implements OnInit {
 		}
 	}
 
-	private get currentUUID() {
+	public get currentUUID() {
 		if (this.currentlySelected)
 			return this.currentlySelected.beacon.uuid;
 		return '';
 	}
 
-	private get currentX() {
+	public get currentX() {
 		if (this.currentlySelected)
 			return this.currentlySelected.circle.x;
 		return '';
 	}
 
-	private get currentY() {
+	public get currentY() {
 		if (this.currentlySelected)
 			return this.currentlySelected.circle.y;
 		return '';
 	}
 
-	private set currentUUID(val) {
+	public set currentUUID(val) {
 		if (this.currentlySelected)
 			this.currentlySelected.beacon.uuid = val;
 	}
 
-	private set currentX(val) {
+	public set currentX(val) {
 		if (this.currentlySelected) {
 			this.currentlySelected.circle.x = val;
 			this.currentlySelected.beacon.x = val;
@@ -66,7 +66,7 @@ export class EditMapComponent implements OnInit {
 		this.map.redraw();
 	}
 
-	private set currentY(val) {
+	public set currentY(val) {
 		if (this.currentlySelected) {
 			this.currentlySelected.circle.y = val;
 			this.currentlySelected.beacon.y = val;
@@ -77,8 +77,8 @@ export class EditMapComponent implements OnInit {
 
 	private startingState: any;
 	private _currentlySelected: any;
-	private get currentlySelected() { return this._currentlySelected; }
-	private set currentlySelected(beacon: any) {
+	public get currentlySelected() { return this._currentlySelected; }
+	public set currentlySelected(beacon: any) {
 		if (this.currentlySelected) {
 			this.currentlySelected.circle.fill = this.fillColor;
 			this.currentlySelected.circle.stroke = this.strokeColor;
