@@ -1,8 +1,9 @@
 <div class='box'>
 	<md-toolbar class='row header' color='primary'>
-		<button md-icon-button (click)='nav.toggle()'>
+		<button md-icon-button id='menuButton' (click)='nav.toggle()'>
 			<md-icon>menu</md-icon>
 		</button>￼
+		<app-home-button></app-home-button>
 	</md-toolbar>
 	<md-sidenav-container class='box'>
 		<md-sidenav #nav mode='side'>

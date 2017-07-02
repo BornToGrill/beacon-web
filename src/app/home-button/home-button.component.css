@@ -1,0 +1,12 @@
+#homeButton {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 25px;
+}
+
+:host {
+	height: 100%;
+	width: 175px;
+}

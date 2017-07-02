@@ -1,3 +1,7 @@
+#menuButton {
+	margin-right: 16px;
+}
+
 #selectedContainer {
 	position: absolute;
 	left: 50%;

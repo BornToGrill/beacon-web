@@ -29,6 +29,7 @@ import { HomeComponent } from './home/home.component';
 import { UserMapComponent } from './user-map/user-map.component';
 import { EditMapComponent } from './edit-map/edit-map.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { HomeButtonComponent } from './home-button/home-button.component';
 
 const appRoutes: Routes = [
    { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
       HomeComponent,
       UserMapComponent,
       EditMapComponent,
-      ConfirmationDialogComponent
+      ConfirmationDialogComponent,
+      HomeButtonComponent
    ],
    entryComponents: [
       ConfirmationDialogComponent
