@@ -21,7 +21,8 @@ import {
    MdTabsModule,
    MdCardModule,
    MdDialogModule,
-   MdProgressBarModule
+   MdProgressBarModule,
+   MdSliderModule
 } from '@angular/material';
 
 import { MapComponent } from './map/map.component';
@@ -72,7 +73,8 @@ const appRoutes: Routes = [
       MdTabsModule,
       MdCardModule,
       MdDialogModule,
-      MdProgressBarModule
+      MdProgressBarModule,
+      MdSliderModule
    ],
    providers: [
       MdIconRegistry

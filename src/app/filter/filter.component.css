@@ -4,11 +4,21 @@ md-sidenav-container {
 md-checkbox {
    display: block;
    margin-bottom: 15px;
+   margin-right: 100px;
 }
 
-md-sidenav {
-   /*border-right: #673ab7 1px solid;
-   background: rgba(103, 58, 183, 0.2);*/
+/*md-sidenav {
    padding: 35px;
    padding-right: 150px;
+}*/
+md-sidenav {
+   padding: 25px;
+}
+
+md-slider {
+   width: 100%;
+}
+
+:host {
+   font-family: Roboto,"Helvetica Neue",sans-serif
 }

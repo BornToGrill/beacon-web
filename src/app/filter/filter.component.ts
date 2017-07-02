@@ -12,11 +12,17 @@ export class FilterComponent {
 
    private _showUsers: boolean;
    private _showBeacons: boolean;
+   private _userRadius: number;
+   private _beaconRadius: number;
 
    @Output()
    public showUsersChange: EventEmitter<boolean> = new EventEmitter();
    @Output()
    public showBeaconsChange: EventEmitter<boolean> = new EventEmitter();
+   @Output()
+   public userRadiusChange: EventEmitter<number> = new EventEmitter();
+   @Output()
+   public beaconRadiusChange: EventEmitter<number> = new EventEmitter();
 
    @Input()
    public get showUsers() : boolean {
@@ -25,6 +31,15 @@ export class FilterComponent {
    @Input()
    public get showBeacons() : boolean {
       return this._showBeacons;
+   }
+   @Input()
+   public get userRadius() : number {
+      return this._userRadius;
+   }
+
+   @Input()
+   public get beaconRadius() : number {
+      return this._beaconRadius;
    }
 
    public set showUsers(val: boolean) {
@@ -35,6 +50,16 @@ export class FilterComponent {
    public set showBeacons(val: boolean) {
       this._showBeacons = val;
       this.showBeaconsChange.emit(this.showBeacons);
+   }
+
+   public set userRadius(val: number) {
+      this._userRadius = val;
+      this.userRadiusChange.emit(this._userRadius);
+   }
+
+   public set beaconRadius(val: number) {
+      this._beaconRadius = val;
+      this.beaconRadiusChange.emit(this._beaconRadius);
    }
 
    public toggle() {

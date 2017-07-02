@@ -3,6 +3,10 @@
    <md-sidenav #nav mode='over'>
          <md-checkbox [(ngModel)]='showUsers' color='primary'>Users</md-checkbox>
    		<md-checkbox [(ngModel)]='showBeacons' color='primary'>Beacons</md-checkbox>
+         <span>User size</span>
+         <md-slider min='5' max='75' step='1' [value]='userRadius' (input)='userRadius=$event.value' color='primary'></md-slider>
+         <span>Beacon size</span>
+         <md-slider min='5' max='75' step='1' [value]='beaconRadius' (input)='beaconRadius=$event.value' color='primary'></md-slider>
    </md-sidenav>
    <ng-content></ng-content>
 </md-sidenav-container>

@@ -6,9 +6,11 @@
       <app-home-button></app-home-button>
    </md-toolbar>
    <app-filter #filter
-   [(showUsers)]='showUsers'
-   [(showBeacons)]='showBeacons'
-   class='box'>
+      [(showUsers)]='showUsers'
+      [(showBeacons)]='showBeacons'
+      [(userRadius)]='userRadius'
+      [(beaconRadius)]='beaconRadius'
+      class='box'>
    <app-map #map></app-map>
 
    <div *ngIf='trackedUser' id='trackingMenuContainer' [@slide-in]='trackedUserState'>

@@ -67,6 +67,27 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 	private stepSize: { x: number, y: number };
 	private nextPosition: { x: number, y: number };
 
+	private _userRadius: number = 35;
+	private _beaconRadius: number = 17.5;
+
+	private get userRadius() { return this._userRadius; }
+	private get beaconRadius() { return this._beaconRadius; }
+
+	private set userRadius(val: number) {
+		this._userRadius = val;
+		if (this.userPosition) {
+			this.userPosition.radius = val;
+			this.map.redraw();
+		}
+	}
+	private set beaconRadius(val: number) {
+		this._beaconRadius = val;
+		if (this.beacons) {
+			this.beacons.forEach(x => x.radius = val);
+			this.map.redraw();
+		}
+	}
+
 	constructor(
 		private activatedRoute: ActivatedRoute,
 		private http: Http
@@ -80,7 +101,7 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 	}
 
 	ngAfterViewInit() {
-		const user = new Circle(-Infinity, -Infinity, 25);
+		const user = new Circle(-Infinity, -Infinity, this.userRadius);
 		user.fill = 'rgba(43, 202, 220, 0.44)';
 		user.stroke = 'rgba(43, 171, 220, 0.58)';
 		user.visible = this.showUsers;
@@ -147,7 +168,7 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 			.then(response => {
 				const json = response.json();
 				const beacons = json.map(b => {
-					const circle = new Circle(b.x, b.y, 25 / 2);
+					const circle = new Circle(b.x, b.y, this.beaconRadius);
 					circle.fill = 'rgba(26, 220, 26, 0.18)';
 					circle.stroke = 'rgba(26, 220, 26, 0.39)';
 					circle.visible = this.showBeacons;
