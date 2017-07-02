@@ -13,8 +13,8 @@
       class='box'>
    <app-map #map></app-map>
 
-   <div *ngIf='trackedUser' id='trackingMenuContainer' [@slide-in]='trackedUserState'>
-      <md-card>
+   <div *ngIf='trackedUser' id='trackingMenuContainer' >
+      <md-card [@slide-in]='trackedUserState'>
          <md-card-header>
             <md-card-title>Tracking</md-card-title>
             <md-card-subtitle><b>{{trackedUser.first_name}} {{trackedUser.last_name}}</b></md-card-subtitle>

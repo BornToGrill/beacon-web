@@ -18,8 +18,11 @@ import { Circle, Img } from '../../models/renderable';
 	styleUrls: ['./user-map.component.css'],
 	animations: [
 		trigger('slide-in', [
-			state('show', style({ transform: 'translateY(-5%)' })),
-			state('noshow', style({ transform: 'translateY(99%)' })),
+			state('noshow', style({
+				paddingTop: 0,
+				paddingBottom: 0,
+				height: '4px'
+			})),
 			transition('noshow <=> show', animate('300ms linear'))
 		])
 	]

@@ -6,19 +6,20 @@
 #trackingMenuContainer {
 		position: fixed;
 		left: 50%;
-		bottom: 0;
+		bottom: 2%;
 }
 
 #trackingMenuContainer > md-card {
 	position: relative;
 	left: -50%;
+	overflow-y: hidden;
 }
 
 #trackingBar {
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 0;
+	bottom: 0;
 }
 
 #displayButtons {
