@@ -2,19 +2,32 @@
    <app-home-button></app-home-button>
 </md-toolbar>
 
-<md-tab-group>
+<style>
+#img {
+   width: 30%;
+   max-height: 80%;
+   height: auto;
+   float: left;
+   border-radius: 0;
+}
+
+</style>
+
+<md-tab-group md-stretch-tabs='yes'>
    <md-tab label="Employees">
       <app-users></app-users>
    </md-tab>
-   <md-tab label="Maps">
+   <md-tab label="Floors">
       <!-- TODO: Move to component -->
       <md-list *ngFor='let map of maps'>
       		<md-list-item (click)='editMap(map);'>
-      			<img md-list-avatar src={{map.image}}>
-      			<h3 md-line>{{map.name}}</h3>
-      			<p md-line>
-      				Description
+      			<img md-list-icon id='img' src={{map.image}}>
+      			<h3 md-line>{{map.name}} {{map.floor}}</h3>
+      			<p md-card-subtitle md-line>
+      				{{map.description}}
       			</p>
+               <p md-line></p>
+               <p md-line></p>
       		</md-list-item>
             <md-divider></md-divider>
       </md-list>

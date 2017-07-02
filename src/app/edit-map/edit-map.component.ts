@@ -16,7 +16,7 @@ export class EditMapComponent implements OnInit {
 	private fillColor = 'rgba(26, 220, 26, 0.18)';
 	private strokeColor = 'rgba(26, 220, 26, 0.39)';
 
-	private selectedFillColor = 'orange';
+	private selectedFillColor = 'rgba(255, 165, 0, 0.28)';
 
 	@ViewChild('map')
 	private map: MapComponent

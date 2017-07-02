@@ -8,7 +8,14 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent {
 
-	private maps = [ { name: 'TamTam', image: 'assets/layout.svg' }]
+	private maps = [
+		{
+			name: 'Dept',
+			floor: '13.5',
+			description: 'Dept office floor',
+			image: 'assets/layout.svg'
+		}
+	]
 
 	constructor(
 		private router: Router
