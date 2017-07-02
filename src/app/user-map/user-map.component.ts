@@ -35,6 +35,7 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 	private get trackedUserState() { return this.showTrackedUser ? 'show' : 'noshow' };
 
 	private fetchPositionTask: number;
+	private hasPosition: string = 'warn';
 
 
 	private userPosition: Circle;
@@ -171,6 +172,11 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 		.toPromise()
 		.then(response => {
 			const json = response.json();
+			if (!json) {
+				this.hasPosition = 'warn';
+				return;
+			}
+			this.hasPosition = 'primary';
 			const { x, y } = json;
 			console.log({x, y});
 			if (this.userPosition.x === -Infinity) {

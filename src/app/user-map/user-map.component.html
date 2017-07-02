@@ -18,7 +18,7 @@
             <md-card-subtitle><b>{{trackedUser.first_name}} {{trackedUser.last_name}}</b></md-card-subtitle>
          </md-card-header>
          <img src={{trackedUser.profile_image}}>
-         <md-progress-bar id='trackingBar' mode="indeterminate"></md-progress-bar>
+         <md-progress-bar id='trackingBar' mode="indeterminate" [color]='hasPosition'></md-progress-bar>
       </md-card>
    </div>
 
