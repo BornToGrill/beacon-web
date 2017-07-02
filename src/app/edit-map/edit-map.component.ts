@@ -23,11 +23,6 @@ export class EditMapComponent implements OnInit {
 
 	private beacons: Array<any>
 
-	private get commited() {
-		if (this.currentlySelected)
-			return this.currentlySelected.beacon.commited;
-	}
-
 	private get currentUUID() {
 		if (this.currentlySelected)
 			return this.currentlySelected.beacon.uuid;
@@ -80,8 +75,7 @@ export class EditMapComponent implements OnInit {
 		if (this._currentlySelected) {
 			this.startingState = {
 				x: beacon.beacon.x,
-				y: beacon.beacon.y,
-				commited: beacon.commited
+				y: beacon.beacon.y
 			}
 			this.currentlySelected.circle.fill = this.selectedFillColor;
 		} else {
@@ -99,19 +93,21 @@ export class EditMapComponent implements OnInit {
 		this.fetchBeacons();
 	}
 
+	private createBeaconObject(beacon, committed) {
+		const circle = new Circle(beacon.x, beacon.y, 25 / 2);
+		circle.fill = this.fillColor;
+		circle.stroke = this.strokeColor;
+		const  b = { beacon, circle, committed };
+		circle.onClick = () => this.beaconClicked(b);
+		return b;
+	}
+
 	private fetchBeacons() {
 		this.http.get('http://raspberry.daniel-molenaar.com:8080/beacons')
 		.toPromise()
 		.then(response => {
 			const json = response.json();
-			const beacons = json.map(b => {
-				const circle = new Circle(b.x, b.y, 25 / 2);
-				circle.fill = this.fillColor;
-				circle.stroke = this.strokeColor;
-				const beacon = { beacon: b, circle: circle, commited: true };
-				circle.onClick = () => this.beaconClicked(beacon);
-				return beacon;
-			});
+			const beacons = json.map(b => this.createBeaconObject(b, true));
 			this.beacons = beacons;
 			beacons.forEach(b => this.map.addElement(b.circle));
 			this.map.redraw();
@@ -119,16 +115,18 @@ export class EditMapComponent implements OnInit {
 	}
 
 	private beaconClicked(beacon: any) {
+		if (this.currentlySelected)
+			this.revertChanges();
 		this.currentlySelected = beacon;
 	}
 
 	private applyChanges() {
-		const { x, y, commited } = this.startingState;
-		const { beacon } = this.currentlySelected;
-		beacon.commited = true;
+		const { x, y } = this.startingState;
+		const { beacon, committed } = this.currentlySelected;
+		this.currentlySelected.committed = true;
 		beacon.x = parseFloat(beacon.x);
 		beacon.y = parseFloat(beacon.y);
-		if (!commited)
+		if (!committed)
 			this.addBeaconInApi(beacon);
 		else
 			this.updateBeaconInApi(beacon);
@@ -136,12 +134,17 @@ export class EditMapComponent implements OnInit {
 	}
 
 	private revertChanges() {
-		const { x, y, comitted } = this.startingState;
-		const { beacon, circle } = this.currentlySelected;
+		const { x, y } = this.startingState;
+		const { beacon, circle, committed } = this.currentlySelected;
 		beacon.x = x;
 		beacon.y = y;
 		circle.x = x;
 		circle.y = y;
+		if (!committed) {
+			this.map.removeElement(circle);
+			const index = this.beacons.indexOf(this.currentlySelected);
+			this.beacons.splice(index, 1);
+		}
 		this.map.redraw();
 		this.currentlySelected = undefined;
 	}
@@ -159,16 +162,22 @@ export class EditMapComponent implements OnInit {
 		});
 	}
 
+	private addBeacon() {
+		const pos = { x: 0, y: 0 };
+		const newBeacon = this.createBeaconObject(pos, false);
+		this.beacons.push(newBeacon);
+		this.currentlySelected = newBeacon;
+		this.map.addElement(newBeacon.circle);
+	}
+
 	private updateBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
 		this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
-		//this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
 			.toPromise()
 			.then(response => { });
 	}
 
 	private addBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
 		this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
-		//this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
 			.toPromise()
 			.then(response => { });
 	}

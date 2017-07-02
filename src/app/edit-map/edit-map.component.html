@@ -14,9 +14,8 @@
 
 <div id='selectedContainer'>
 	<md-card *ngIf='currentlySelected'>
-	<!-- <md-card> -->
 		<md-input-container class='full-width'>
-			<input mdInput placeholder="UUID" [(ngModel)]='currentUUID' disabled='commited'>
+			<input mdInput placeholder="UUID" [(ngModel)]='currentUUID' [disabled]='currentlySelected.committed'>
 		</md-input-container>
 		<div class='full-width'>
 			<md-input-container>
@@ -29,9 +28,12 @@
 	</md-card>
 </div>
 
+<div *ngIf='!currentlySelected' id='confirmButtons'>
+	<button md-fab color='primary' (click)='addBeacon()'><md-icon>add</md-icon></button>
+</div>
+
 <div *ngIf='currentlySelected' id='confirmButtons'>
-<!--<div id='confirmButtons'>-->
-	<a md-fab color='primary' (click)='applyChanges()'><md-icon>check</md-icon></a>
-	<a md-fab color='accent' (click)='revertChanges()'><md-icon>clear</md-icon></a>
-	<a md-fab color='warn' (click)='deleteBeacon()'><md-icon>clear</md-icon></a>
+	<button md-fab color='primary' (click)='applyChanges()'><md-icon>check</md-icon></button>
+	<button md-fab color='accent' (click)='revertChanges()'><md-icon>undo</md-icon></button>
+	<button *ngIf='currentlySelected.committed' md-fab color='warn' (click)='deleteBeacon()'><md-icon>clear</md-icon></button>
 </div>
