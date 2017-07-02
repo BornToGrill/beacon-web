@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild,
+import { Component, AfterViewInit, OnDestroy, ViewChild,
 	trigger,
     state,
     style,
@@ -24,7 +24,7 @@ import { Circle, Img } from '../../models/renderable';
 		])
 	]
 })
-export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class UserMapComponent implements AfterViewInit, OnDestroy {
 
 	@ViewChild('map')
 	private map: MapComponent;
@@ -35,6 +35,7 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	private get trackedUserState() { return this.showTrackedUser ? 'show' : 'noshow' };
 
 	private fetchPositionTask: number;
+
 
 	private userPosition: Circle;
 	private beacons: Array<Circle>;
@@ -59,8 +60,11 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 			this.map.redraw();
 		}
-
 	}
+
+	private requestAnimationFrame: any;
+	private stepSize: { x: number, y: number };
+	private nextPosition: { x: number, y: number };
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -68,9 +72,10 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 	) {
 		this.showUsers = true;
 		this.showBeacons = false;
-	}
-
-	ngOnInit() {
+		this.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window['mozRequestAnimationFrame'] || window['RequestAnimationFrame'] || window['msRequestAnimationFrame'] ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
 	}
 
 	ngAfterViewInit() {
@@ -85,12 +90,54 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.activatedRoute.params.subscribe(params => {
 			this.userId = +params['id'];
 			this.fetchUser();
+			this.fetchPosition();
 			this.fetchPositionTask = setInterval(this.fetchPosition.bind(this), 1000);
 		});
 	}
 
 	ngOnDestroy() {
 		clearInterval(this.fetchPositionTask);
+	}
+
+	private animate(toPosition?) {
+		if (toPosition) {
+			this.nextPosition = toPosition;
+			this.stepSize = {
+				x: (toPosition.x - this.userPosition.x) / 50,
+				y: (toPosition.y - this.userPosition.y) / 50
+			}
+		}
+		if (!this.nextPosition) {
+			this.nextPosition = undefined;
+			this.stepSize = undefined;
+			return;
+		}
+
+		if (this.isInBounds(this.userPosition.x, this.nextPosition.x, this.stepSize.x)) {
+			this.stepSize.x = 0;
+		}
+		if (this.isInBounds(this.userPosition.y, this.nextPosition.y, this.stepSize.y)) {
+			this.stepSize.y = 0;
+		}
+		if (this.stepSize.x === 0 && this.stepSize.y === 0) {
+			this.nextPosition = undefined;
+			this.stepSize = undefined;
+			return;
+		}
+
+		this.userPosition.x += this.stepSize.x;
+		this.userPosition.y += this.stepSize.y;
+		this.map.redraw();
+
+		this.requestAnimationFrame(() => {
+			this.animate();
+		});
+	}
+
+	private isInBounds(current, next, stepSize) {
+		const low = Math.min(current, current + stepSize);
+		const high = Math.max(current, current + stepSize);
+		return next >= low && next <= high;
 	}
 
 	private fetchBeacons() {
@@ -125,10 +172,14 @@ export class UserMapComponent implements OnInit, AfterViewInit, OnDestroy {
 		.then(response => {
 			const json = response.json();
 			const { x, y } = json;
-			//console.log({x, y});
-			this.userPosition.x = x;
-			this.userPosition.y = y;
-			this.map.redraw();
+			console.log({x, y});
+			if (this.userPosition.x === -Infinity) {
+				this.userPosition.x = x;
+				this.userPosition.y = y;
+				this.map.redraw();
+			} else {
+				this.animate({ x, y });
+			}
 		})
 	}
 
