@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
 import { MdDialog } from '@angular/material';
 
@@ -97,12 +98,21 @@ export class EditMapComponent implements OnInit {
 	}
 
 	constructor(
+		private activatedRoute: ActivatedRoute,
 		private http: Http,
 		private dialog: MdDialog
 	) { }
 
 	ngOnInit() {
-		this.fetchBeacons();
+		this.activatedRoute.data.subscribe(params => {
+			const { data } = params;
+			const { beacons, map } = data;
+			this.map.setMap(map.image, { x: map.width, y: map.height });
+			const mapped = beacons.map(b => this.createBeaconObject(b, true));
+			this.beacons = mapped;
+			mapped.forEach(b => this.map.addElement(b.circle));
+			this.map.redraw();
+		})
 	}
 
 	private createBeaconObject(beacon, committed) {
@@ -112,18 +122,6 @@ export class EditMapComponent implements OnInit {
 		const  b = { beacon, circle, committed };
 		circle.onClick = () => this.beaconClicked(b);
 		return b;
-	}
-
-	private fetchBeacons() {
-		this.http.get('http://raspberry.daniel-molenaar.com:8080/beacons')
-		.toPromise()
-		.then(response => {
-			const json = response.json();
-			const beacons = json.map(b => this.createBeaconObject(b, true));
-			this.beacons = beacons;
-			beacons.forEach(b => this.map.addElement(b.circle));
-			this.map.redraw();
-		});
 	}
 
 	private beaconClicked(beacon: any) {

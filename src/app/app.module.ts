@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 
 import { UserMapResolve } from './user-map/user-map.component.resolve';
+import { EditMapResolve } from './edit-map/edit-map.component.resolve';
 
 import {
    MdCheckboxModule,
@@ -38,7 +39,7 @@ import { HomeButtonComponent } from './home-button/home-button.component';
 const appRoutes: Routes = [
    { path: '', component: HomeComponent, pathMatch: 'full' },
    { path: 'position/:id', component: UserMapComponent, resolve: { data: UserMapResolve } },
-   { path: 'maps/:name', component: EditMapComponent }
+   { path: 'maps/:name/:floor', component: EditMapComponent, resolve: { data: EditMapResolve } }
 ];
 
 @NgModule({
@@ -80,7 +81,8 @@ const appRoutes: Routes = [
    ],
    providers: [
       MdIconRegistry,
-      UserMapResolve
+      UserMapResolve,
+      EditMapResolve
    ],
    bootstrap: [
       AppComponent
