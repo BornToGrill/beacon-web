@@ -52,10 +52,6 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
    ngOnInit() {
-      this.mapImage = new Img('../../assets/layout.svg', () => {
-         this.configureCanvas();
-         this.redraw();
-      });
       this.canvas = this.canvasElement.nativeElement;
       this.ctx = this.canvas.getContext('2d');
       trackTransforms(this.ctx);
@@ -63,7 +59,19 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
    ngAfterViewInit() {
-      this.redraw();
+      //this.redraw();
+   }
+
+   public setMap(url: string, meterSize) {
+      this.meterSize = meterSize;
+      if (this.mapImage) {
+         this.mapImage.setImage(url);
+      } else {
+         this.mapImage = new Img(url, () => {
+            this.resizeCanvas();
+            this.redraw();
+         });
+      }
    }
 
    public transformPosition(position: { x: number, y: number }) {
@@ -98,12 +106,8 @@ export class MapComponent implements OnInit, AfterViewInit {
       this.redraw();
    }
 
-   private configureCanvas() {
-      const canvas = this.canvasElement.nativeElement;
-      this.resizeCanvas();
-   }
-
    public canvasMouseDown(event) {
+      if (!this.mapImage) return;
       document.body.style['mozUserSelect'] =
             document.body.style.webkitUserSelect =
             document.body.style.userSelect = 'none';
@@ -121,7 +125,7 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
    public canvasClick(event: any) {
-      if (this.dragged) return;
+      if (this.dragged || !this.mapImage) return;
 
       const { offsetX, offsetY } = event;
       const canvasPoint = this.ctx.transformedPoint(offsetX, offsetY);
@@ -132,6 +136,7 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
    public canvasMouseMove(event) {
+      if (!this.mapImage) return;
       this.lastX = event.offsetX || (event.pageX - this.canvas.offsetLeft);
       this.lastY = event.offsetY || (event.pageY - this.canvas.offsetTop);
       this.dragged = true;
@@ -143,6 +148,7 @@ export class MapComponent implements OnInit, AfterViewInit {
    }
 
    private canvasScroll(event) {
+      if (!this.mapImage) return;
       var delta = event.wheelDelta ? event.wheelDelta / 40 : event.detail ? -event.detail : 0;
       if (delta) this.zoom(delta);
       event.preventDefault();
@@ -167,6 +173,8 @@ export class MapComponent implements OnInit, AfterViewInit {
    public redraw() {
       const ctx = this.ctx;
       const canvas = this.canvas;
+      if (!canvas || !ctx) return;
+
       const p1 = ctx.transformedPoint(0, 0);
       const p2 = ctx.transformedPoint(canvas.width, canvas.height);
       ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
@@ -176,10 +184,12 @@ export class MapComponent implements OnInit, AfterViewInit {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.restore();
 
-      this.mapImage.render(canvas, ctx, this.transformPosition.bind(this));
+      if (this.mapImage) {
+         this.mapImage.render(canvas, ctx, this.transformPosition.bind(this));
 
-      this._mapElements.forEach(x => {
-         x.render(canvas, ctx, this.transformPosition.bind(this));
-      });
+         this._mapElements.forEach(x => {
+            x.render(canvas, ctx, this.transformPosition.bind(this));
+         });
+      }
    }
 }

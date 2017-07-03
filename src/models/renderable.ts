@@ -68,6 +68,10 @@ export class Img implements IRenderable {
 		this._image.src = imageUrl;
 	}
 
+	public setImage(url: string) {
+		this._image.src = url;
+	}
+
 	public get image() {
 		return this._image;
 	}

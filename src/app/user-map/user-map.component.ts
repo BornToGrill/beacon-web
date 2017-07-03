@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, ViewChild,
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild,
 	trigger,
     state,
     style,
@@ -27,12 +27,13 @@ import { Circle, Img } from '../../models/renderable';
 		])
 	]
 })
-export class UserMapComponent implements AfterViewInit, OnDestroy {
+export class UserMapComponent implements OnInit, OnDestroy {
 
 	@ViewChild('map')
 	private map: MapComponent;
 
-	private userId: number;
+	private currentMap: { name: string, floor: string };
+
 	public trackedUser: any;
 	public showTrackedUser: boolean = true;
 	public get trackedUserState() { return this.showTrackedUser ? 'show' : 'noshow' };
@@ -103,20 +104,30 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
         };
 	}
 
-	ngAfterViewInit() {
-		const user = new Circle(-Infinity, -Infinity, this.userRadius);
+	private createUser(pos) : Circle {
+		const user = new Circle(pos.x, pos.y, this.userRadius);
 		user.fill = 'rgba(43, 202, 220, 0.44)';
 		user.stroke = 'rgba(43, 171, 220, 0.58)';
 		user.visible = this.showUsers;
-		this.userPosition = user;
-		this.map.addElement(this.userPosition);
+		return user;
+	}
 
-		this.fetchBeacons();
-		this.activatedRoute.params.subscribe(params => {
-			this.userId = +params['id'];
-			this.fetchUser();
-			this.fetchPosition();
+	ngOnInit() {
+		this.activatedRoute.data.subscribe(args => {
+			const { user, position, map } = args.data;
+
+			if (position && map) {
+				this.userPosition = this.createUser(position);
+				this.hasPosition = 'primary';
+				this.map.addElement(this.userPosition);
+				this.currentMap = map;
+				this.map.setMap(map.image, { x: map.width, y: map.height });
+			}
+
+			this.trackedUser = user;
+			this.fetchBeacons();
 			this.fetchPositionTask = setInterval(this.fetchPosition.bind(this), 1000);
+ 			this.animate();
 		});
 	}
 
@@ -124,19 +135,28 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 		clearInterval(this.fetchPositionTask);
 	}
 
-	private animate(toPosition?) {
-		if (toPosition) {
-			this.nextPosition = toPosition;
+	private setNextPosition(position) {
+		if (this.userPosition) {
+			this.nextPosition = position;
 			this.stepSize = {
-				x: (toPosition.x - this.userPosition.x) / 50,
-				y: (toPosition.y - this.userPosition.y) / 50
+				x: (position.x - this.userPosition.x) / 50,
+				y: (position.y - this.userPosition.y) / 50
 			}
+		} else {
+			this.userPosition = this.createUser(position);
+			this.map.addElement(this.userPosition);
 		}
-		if (!this.nextPosition) {
-			this.nextPosition = undefined;
-			this.stepSize = undefined;
-			return;
-		}
+		this.map.redraw();
+	}
+
+	private nextFrame() {
+		this.requestAnimationFrame(() => {
+			this.animate();
+		});
+	}
+
+	private animate() {
+		if (!this.nextPosition) return this.nextFrame();
 
 		if (this.isInBounds(this.userPosition.x, this.nextPosition.x, this.stepSize.x)) {
 			this.stepSize.x = 0;
@@ -144,19 +164,16 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 		if (this.isInBounds(this.userPosition.y, this.nextPosition.y, this.stepSize.y)) {
 			this.stepSize.y = 0;
 		}
+
 		if (this.stepSize.x === 0 && this.stepSize.y === 0) {
 			this.nextPosition = undefined;
-			this.stepSize = undefined;
-			return;
+			return this.nextFrame();
 		}
 
 		this.userPosition.x += this.stepSize.x;
 		this.userPosition.y += this.stepSize.y;
 		this.map.redraw();
-
-		this.requestAnimationFrame(() => {
-			this.animate();
-		});
+		return this.nextFrame();
 	}
 
 	private isInBounds(current, next, stepSize) {
@@ -183,16 +200,8 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 			});
 	}
 
-	private fetchUser() {
-		this.http.get(`http://raspberry.daniel-molenaar.com:8080/users/${this.userId}`)
-			.toPromise()
-			.then(response => {
-				this.trackedUser = response.json();
-			});
-	}
-
 	private fetchPosition() {
-		this.http.get(`http://raspberry.daniel-molenaar.com:8081/${this.userId}`)
+		this.http.get(`http://localhost:8081/${this.trackedUser.id}`)
 		.toPromise()
 		.then(response => {
 			const json = response.json();
@@ -200,17 +209,31 @@ export class UserMapComponent implements AfterViewInit, OnDestroy {
 				this.hasPosition = 'warn';
 				return;
 			}
-			this.hasPosition = 'primary';
-			const { x, y } = json;
-			console.log({x, y});
-			if (this.userPosition.x === -Infinity) {
-				this.userPosition.x = x;
-				this.userPosition.y = y;
-				this.map.redraw();
-			} else {
-				this.animate({ x, y });
+			const { map_name, map_floor } = json;
+			if (!map_name || !map_floor) {
+				this.hasPosition = 'warn';
+				return;
 			}
+
+			this.hasPosition = 'primary';
+			if (!this.currentMap || this.currentMap.name !== map_name || this.currentMap.floor !== map_floor) {
+				this.fetchMap(map_name, map_floor);
+			}
+
+			const { x, y } = json;
+			//console.log({x,y});
+			this.setNextPosition({ x, y });
 		})
+	}
+
+	private fetchMap(name: string, floor: string) {
+		this.http.get(`http://localhost:8080/maps/${name}/${floor}`)
+			.toPromise()
+			.then(response => {
+				const map = response.json();
+				this.currentMap = map;
+				this.map.setMap(map.image, { x: map.width, y: map.height });
+			})
 	}
 
 }

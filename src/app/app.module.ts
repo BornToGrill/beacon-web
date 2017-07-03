@@ -8,6 +8,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 
+import { UserMapResolve } from './user-map/user-map.component.resolve';
+
 import {
    MdCheckboxModule,
    MdListModule,
@@ -35,7 +37,7 @@ import { HomeButtonComponent } from './home-button/home-button.component';
 
 const appRoutes: Routes = [
    { path: '', component: HomeComponent, pathMatch: 'full' },
-   { path: 'position/:id', component: UserMapComponent },
+   { path: 'position/:id', component: UserMapComponent, resolve: { data: UserMapResolve } },
    { path: 'maps/:name', component: EditMapComponent }
 ];
 
@@ -77,7 +79,8 @@ const appRoutes: Routes = [
       MdSliderModule
    ],
    providers: [
-      MdIconRegistry
+      MdIconRegistry,
+      UserMapResolve
    ],
    bootstrap: [
       AppComponent
