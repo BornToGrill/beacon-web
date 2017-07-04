@@ -14,6 +14,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 })
 export class EditMapComponent implements OnInit {
 
+	private baseUrl = 'http://raspberry.daniel-molenaar.com';
 	private fillColor = 'rgba(26, 220, 26, 0.18)';
 	private strokeColor = 'rgba(26, 220, 26, 0.39)';
 
@@ -181,19 +182,19 @@ export class EditMapComponent implements OnInit {
 	}
 
 	private updateBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
-		this.http.put(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`, beacon)
+		this.http.put(`${this.baseUrl}:8080/beacons/${beacon.uuid}`, beacon)
 			.toPromise()
 			.then(response => { });
 	}
 
 	private addBeaconInApi(beacon: { uuid: string, x: number, y: number }) {
-		this.http.post(`http://raspberry.daniel-molenaar.com:8080/beacons`, beacon)
+		this.http.post(`${this.baseUrl}:8080/beacons`, beacon)
 			.toPromise()
 			.then(response => { });
 	}
 
 	private deleteBeaconInApi(beacon: { uuid: string }) {
-		this.http.delete(`http://raspberry.daniel-molenaar.com:8080/beacons/${beacon.uuid}`)
+		this.http.delete(`${this.baseUrl}:8080/beacons/${beacon.uuid}`)
 			.toPromise()
 			.then(response => { });
 	}

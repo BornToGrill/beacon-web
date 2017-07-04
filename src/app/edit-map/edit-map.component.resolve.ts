@@ -10,18 +10,18 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class EditMapResolve implements Resolve<any> {
 
-	private base_url: string = 'http://localhost'
+	private baseUrl: string = 'http://raspberry.daniel-molenaar.com'
 
 	constructor(private http: Http, private router: Router) { }
 
 	resolve(route: ActivatedRouteSnapshot, state: Object): Object | Promise<any> | boolean {
 		const name = route.params['name'];
 		const floor = route.params['floor'];
-		const mapPromise = this.http.get(`${this.base_url}:8080/maps/${name}/${floor}`)
+		const mapPromise = this.http.get(`${this.baseUrl}:8080/maps/${name}/${floor}`)
 			.toPromise()
 			.then(response => response.json());
 
-		const beaconPromise = this.http.get(`${this.base_url}:8080/beacons`)
+		const beaconPromise = this.http.get(`${this.baseUrl}:8080/maps/${name}/${floor}/beacons`)
 			.toPromise()
 			.then(response => response.json());
 

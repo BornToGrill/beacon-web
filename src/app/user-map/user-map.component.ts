@@ -29,6 +29,8 @@ import { Circle, Img } from '../../models/renderable';
 })
 export class UserMapComponent implements OnInit, OnDestroy {
 
+	private baseUrl: string = 'http://raspberry.daniel-molenaar.com';
+
 	@ViewChild('map')
 	private map: MapComponent;
 
@@ -183,7 +185,7 @@ export class UserMapComponent implements OnInit, OnDestroy {
 	}
 
 	private fetchBeacons() {
-		this.http.get('http://raspberry.daniel-molenaar.com:8080/beacons')
+		this.http.get(`${this.baseUrl}:8080/beacons`)
 			.toPromise()
 			.then(response => {
 				const json = response.json();
@@ -201,7 +203,7 @@ export class UserMapComponent implements OnInit, OnDestroy {
 	}
 
 	private fetchPosition() {
-		this.http.get(`http://localhost:8081/${this.trackedUser.id}`)
+		this.http.get(`${this.baseUrl}:8081/${this.trackedUser.id}`)
 		.toPromise()
 		.then(response => {
 			const json = response.json();
@@ -227,7 +229,7 @@ export class UserMapComponent implements OnInit, OnDestroy {
 	}
 
 	private fetchMap(name: string, floor: string) {
-		this.http.get(`http://localhost:8080/maps/${name}/${floor}`)
+		this.http.get(`${this.baseUrl}:8080/maps/${name}/${floor}`)
 			.toPromise()
 			.then(response => {
 				const map = response.json();

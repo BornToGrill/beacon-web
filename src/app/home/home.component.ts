@@ -10,7 +10,7 @@ import { Http } from '@angular/http';
 })
 export class HomeComponent {
 
-	private base_url: string = 'http://localhost:8080';
+	private baseUrl: string = 'http://raspberry.daniel-molenaar.com';
 
 	public maps = []; /*[
 		{
@@ -33,7 +33,7 @@ export class HomeComponent {
 	}
 
 	private getMaps() {
-		this.http.get(`${this.base_url}/maps`)
+		this.http.get(`${this.baseUrl}:8080/maps`)
 			.toPromise()
 			.then(response => {
 				this.maps = response.json();

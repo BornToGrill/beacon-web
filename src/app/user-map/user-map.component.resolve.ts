@@ -10,21 +10,21 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class UserMapResolve implements Resolve<any> {
 
-	private base_url: string = 'http://localhost'
+	private baseUrl: string = 'http://localhost'
 
 	constructor(private http: Http, private router: Router) { }
 
 	resolve(route: ActivatedRouteSnapshot, state: Object): Object | Promise<any> | boolean {
 		const userId = route.params['id'];
-		const userPromise = this.http.get(`${this.base_url}:8080/users/${userId}`)
+		const userPromise = this.http.get(`${this.baseUrl}:8080/users/${userId}`)
 		.toPromise()
 		.then(response => response.json());
-		const mapPromise = this.http.get(`${this.base_url}:8081/${userId}`)
+		const mapPromise = this.http.get(`${this.baseUrl}:8081/${userId}`)
 		.toPromise()
 		.then(response => response.json())
 		.then(position => {
 			if (!position || !position.map_name || !position.map_floor) return { map: undefined, position: undefined };
-			return this.http.get(`${this.base_url}:8080/maps/${position.map_name}/${position.map_floor}`)
+			return this.http.get(`${this.baseUrl}:8080/maps/${position.map_name}/${position.map_floor}`)
 				.toPromise()
 				.then(response => response.json())
 				.then(map => ({ map, position }) );
