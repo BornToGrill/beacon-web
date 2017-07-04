@@ -1,5 +1,6 @@
 md-list {
 	padding-top: 0;
+	cursor: pointer;
 }
 
 md-list-item {

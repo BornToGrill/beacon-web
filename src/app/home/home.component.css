@@ -1,0 +1,17 @@
+#imgName {
+	font-size: 1.2em;
+}
+
+
+md-list {
+	padding-top: 0;
+	cursor: pointer;
+}
+
+md-list-item {
+	transition: background-color 0.5s linear;
+}
+
+md-list-item:hover {
+	background-color: rgba(103, 58, 183, 0.16);
+}

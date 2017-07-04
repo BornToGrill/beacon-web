@@ -22,7 +22,8 @@
       <md-list *ngFor='let map of maps'>
       		<md-list-item (click)='editMap(map);'>
       			<img md-list-icon id='img' src={{map.image}}>
-      			<h3 md-line>{{map.name}} {{map.floor}}</h3>
+      			<h1 md-line id='imgName'>{{map.name}}</h1>
+               <h3 md-line>{{map.floor}}</h3>
       			<p md-card-subtitle md-line>
       				{{map.description}}
       			</p>
