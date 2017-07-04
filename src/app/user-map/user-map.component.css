@@ -2,6 +2,9 @@
 	margin-right: 16px;
 }
 
+#userImage {
+	border-radius: 2px;
+}
 
 #trackingMenuContainer {
 		position: fixed;

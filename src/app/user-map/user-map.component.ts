@@ -42,6 +42,8 @@ export class UserMapComponent implements OnInit, OnDestroy {
 
 	private fetchPositionTask: number;
 	public hasPosition: string = 'warn';
+	private lastTimestamp: any;
+	private samePositionCount: number = 0;
 
 
 	public userPosition: Circle;
@@ -114,6 +116,14 @@ export class UserMapComponent implements OnInit, OnDestroy {
 		return user;
 	}
 
+	private createBeacon(pos) : Circle {
+		const beacon = new Circle(pos.x, pos.y, this.beaconRadius);
+		beacon.fill = 'rgba(26, 220, 26, 0.18)';
+		beacon.stroke = 'rgba(26, 220, 26, 0.39)';
+		beacon.visible = this.showBeacons;
+		return beacon;
+	}
+
 	ngOnInit() {
 		this.activatedRoute.data.subscribe(args => {
 			const { user, position, map } = args.data;
@@ -124,10 +134,10 @@ export class UserMapComponent implements OnInit, OnDestroy {
 				this.map.addElement(this.userPosition);
 				this.currentMap = map;
 				this.map.setMap(map.image, { x: map.width, y: map.height });
+				this.fetchBeacons(map.name, map.floor);
 			}
 
 			this.trackedUser = user;
-			this.fetchBeacons();
 			this.fetchPositionTask = setInterval(this.fetchPosition.bind(this), 1000);
  			this.animate();
 		});
@@ -184,24 +194,6 @@ export class UserMapComponent implements OnInit, OnDestroy {
 		return next >= low && next <= high;
 	}
 
-	private fetchBeacons() {
-		this.http.get(`${this.baseUrl}:8080/beacons`)
-			.toPromise()
-			.then(response => {
-				const json = response.json();
-				const beacons = json.map(b => {
-					const circle = new Circle(b.x, b.y, this.beaconRadius);
-					circle.fill = 'rgba(26, 220, 26, 0.18)';
-					circle.stroke = 'rgba(26, 220, 26, 0.39)';
-					circle.visible = this.showBeacons;
-					return circle;
-				});
-				this.beacons = beacons;
-				beacons.forEach(b => this.map.addElement(b));
-				this.map.redraw();
-			});
-	}
-
 	private fetchPosition() {
 		this.http.get(`${this.baseUrl}:8081/${this.trackedUser.id}`)
 		.toPromise()
@@ -217,15 +209,42 @@ export class UserMapComponent implements OnInit, OnDestroy {
 				return;
 			}
 
-			this.hasPosition = 'primary';
 			if (!this.currentMap || this.currentMap.name !== map_name || this.currentMap.floor !== map_floor) {
 				this.fetchMap(map_name, map_floor);
 			}
 
-			const { x, y } = json;
+			const { x, y, timestamp } = json;
+
+			if (this.lastTimestamp === timestamp) {
+				this.samePositionCount++;
+				if (this.samePositionCount >= 3) {
+					this.hasPosition = 'accent';
+				}
+				return;
+			}
+			this.samePositionCount = 0;
+			this.lastTimestamp = timestamp;
+
+			this.hasPosition = 'primary';
 			//console.log({x,y});
 			this.setNextPosition({ x, y });
 		})
+	}
+
+	private fetchBeacons(mapName: string, mapFloor: string) {
+		this.http.get(`${this.baseUrl}:8080/maps/${mapName}/${mapFloor}/beacons`)
+				.toPromise()
+				.then(response => {
+					const json = response.json();
+					if (this.beacons) {
+						this.beacons.forEach(b => {
+							this.map.removeElement(b);
+						});
+						this.beacons = [];
+					}
+					this.beacons = json.map(b => this.createBeacon(b));
+					this.beacons.forEach(b => this.map.addElement(b));
+				});
 	}
 
 	private fetchMap(name: string, floor: string) {
@@ -235,6 +254,7 @@ export class UserMapComponent implements OnInit, OnDestroy {
 				const map = response.json();
 				this.currentMap = map;
 				this.map.setMap(map.image, { x: map.width, y: map.height });
+				this.fetchBeacons(map.name, map.floor);
 			})
 	}
 

@@ -17,18 +17,18 @@ export class UserMapResolve implements Resolve<any> {
 	resolve(route: ActivatedRouteSnapshot, state: Object): Object | Promise<any> | boolean {
 		const userId = route.params['id'];
 		const userPromise = this.http.get(`${this.baseUrl}:8080/users/${userId}`)
-		.toPromise()
-		.then(response => response.json());
+			.toPromise()
+			.then(response => response.json());
 		const mapPromise = this.http.get(`${this.baseUrl}:8081/${userId}`)
-		.toPromise()
-		.then(response => response.json())
-		.then(position => {
-			if (!position || !position.map_name || !position.map_floor) return { map: undefined, position: undefined };
-			return this.http.get(`${this.baseUrl}:8080/maps/${position.map_name}/${position.map_floor}`)
-				.toPromise()
-				.then(response => response.json())
-				.then(map => ({ map, position }) );
-		});
+			.toPromise()
+			.then(response => response.json())
+			.then(position => {
+				if (!position || !position.map_name || !position.map_floor) return { map: undefined, position: undefined };
+				return this.http.get(`${this.baseUrl}:8080/maps/${position.map_name}/${position.map_floor}`)
+					.toPromise()
+					.then(response => response.json())
+					.then(map => ({ map, position }) );
+			});
 
 
 		const res = Promise.all([ userPromise, mapPromise])
