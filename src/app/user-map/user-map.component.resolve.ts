@@ -10,7 +10,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class UserMapResolve implements Resolve<any> {
 
-	private baseUrl: string = 'http://localhost'
+	private baseUrl: string = 'http://raspberry.daniel-molenaar.com'
 
 	constructor(private http: Http, private router: Router) { }
 
