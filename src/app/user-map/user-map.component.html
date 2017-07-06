@@ -18,6 +18,7 @@
          <md-card-header>
             <md-card-title>{{trackedUser.first_name}} {{trackedUser.last_name}}</md-card-title>
             <md-card-subtitle>{{trackedUser.job}}</md-card-subtitle>
+            <md-card-title *ngIf='currentMap'>at {{currentMap.name}} {{currentMap.floor}}</md-card-title>
          </md-card-header>
          <img id='userImage' src={{trackedUser.profile_image}}>
          <md-progress-bar id='trackingBar' mode="indeterminate" [color]='hasPosition'></md-progress-bar>
